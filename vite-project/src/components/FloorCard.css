@@ -1,0 +1,129 @@
+/* FloorCard.css */
+.floor-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.floor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e0;
+}
+
+.floor-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.floor-number-badge {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.floor-header h3 {
+  color: #2d3748;
+  font-size: 1.2rem;
+  margin: 0;
+  flex: 1;
+}
+
+.floor-stats {
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.stat-row:last-child {
+  margin-bottom: 0;
+}
+
+.stat-label {
+  color: #718096;
+  font-size: 0.9rem;
+}
+
+.stat-value {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.room-types {
+  margin-bottom: 15px;
+}
+
+.room-types-label {
+  color: #718096;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.room-types-value {
+  color: #4a5568;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.occupancy-indicator {
+  margin-bottom: 15px;
+}
+
+.occupancy-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.occupancy-percent {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.occupancy-bar {
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.occupancy-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.floor-facilities {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.facility-badge {
+  padding: 4px 8px;
+  background: #edf2f7;
+  color: #4a5568;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}

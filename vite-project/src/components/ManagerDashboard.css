@@ -1,0 +1,427 @@
+/* Manager Dashboard */
+.manager-dashboard {
+  display: flex;
+  height: 100vh;
+  background: #f5f7fa;
+}
+
+/* Manager Sidebar */
+.manager-sidebar {
+  width: 320px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 25px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.manager-info-card {
+  padding: 30px 25px;
+  text-align: center;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.manager-avatar {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 32px;
+  color: white;
+  font-weight: bold;
+}
+
+.manager-info-card h3 {
+  margin: 0 0 5px 0;
+  color: #2d3748;
+  font-size: 22px;
+}
+
+.manager-role {
+  color: #718096;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.manager-details {
+  text-align: left;
+  background: #f7fafc;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.manager-details p {
+  margin: 8px 0;
+  color: #4a5568;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.manager-details span {
+  font-size: 16px;
+}
+
+.register-student-btn {
+  margin: 20px;
+  padding: 15px;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.3s;
+}
+
+.register-student-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(72, 187, 120, 0.4);
+}
+
+.logout-btn {
+  margin: auto 20px 20px;
+  padding: 12px;
+  background: #f56565;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Main Content */
+.manager-main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 30px;
+}
+
+.content-header {
+  margin-bottom: 30px;
+}
+
+.content-header h1 {
+  margin: 0 0 5px 0;
+  color: #2d3748;
+  font-size: 32px;
+}
+
+.content-header p {
+  color: #718096;
+  font-size: 18px;
+}
+
+/* Section Buttons */
+.section-buttons {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.section-btn {
+  flex: 1;
+  padding: 20px;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.section-btn:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.section-btn.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+/* Content Section */
+.content-section {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* Meal Management */
+.meal-management h2 {
+  margin: 0 0 25px 0;
+  color: #2d3748;
+  font-size: 24px;
+}
+
+.students-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.student-meal-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.student-meal-card h4 {
+  margin: 0 0 10px 0;
+  color: #2d3748;
+  font-size: 18px;
+}
+
+.student-meal-card p {
+  margin: 5px 0;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.meal-toggle {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e0;
+  transition: .4s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #48bb78;
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.meal-toggle .on {
+  color: #48bb78;
+  font-weight: 600;
+}
+
+.meal-toggle .off {
+  color: #f56565;
+  font-weight: 600;
+}
+
+.meal-summary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.meal-summary h3 {
+  margin: 0 0 10px 0;
+  font-size: 20px;
+}
+
+.meal-count {
+  font-size: 36px;
+  font-weight: bold;
+}
+
+/* Attendance Table */
+.attendance-table {
+  overflow-x: auto;
+}
+
+.attendance-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.attendance-table th {
+  background: #f7fafc;
+  padding: 15px;
+  text-align: left;
+  color: #4a5568;
+  font-weight: 600;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.attendance-table td {
+  padding: 15px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.status {
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.status.present {
+  background: #c6f6d5;
+  color: #276749;
+}
+
+.status.absent {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+/* Room Allocation */
+.room-allocation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.student-room-card {
+  background: #f7fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.student-room-card h4 {
+  margin: 0 0 15px 0;
+  color: #2d3748;
+  font-size: 18px;
+}
+
+.room-info p {
+  margin: 8px 0;
+  color: #4a5568;
+  font-size: 14px;
+}
+
+.edit-room-btn {
+  width: 100%;
+  margin-top: 15px;
+  padding: 10px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-room-btn:hover {
+  background: #5a67d8;
+}
+
+/* Student Form */
+.student-form {
+  padding: 30px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  margin-bottom: 8px;
+  color: #4a5568;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.form-section-divider {
+  grid-column: 1 / -1;
+  margin: 20px 0;
+  padding-top: 20px;
+  border-top: 2px solid #e2e8f0;
+}
+
+.form-section-divider h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 18px;
+}

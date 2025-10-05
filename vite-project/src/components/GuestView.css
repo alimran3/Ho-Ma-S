@@ -1,0 +1,317 @@
+/* Guest View Styles */
+.guest-view {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+/* Guest Header */
+.guest-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 30px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.header-content h1 {
+  margin: 0 0 5px 0;
+  font-size: 32px;
+}
+
+.header-content p {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.logout-btn {
+  padding: 10px 25px;
+  background: white;
+  color: #667eea;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+}
+
+/* Guest Content */
+.guest-content {
+  padding: 40px;
+}
+
+/* Sections */
+.section {
+  background: white;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.section h2 {
+  margin: 0 0 25px 0;
+  color: #2d3748;
+  font-size: 24px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #718096;
+  font-size: 18px;
+}
+
+/* Halls Grid */
+.halls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.hall-card {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 25px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.hall-card:hover {
+  border-color: #cbd5e0;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.hall-card.selected {
+  border-color: #667eea;
+  background: #ebf4ff;
+}
+
+.hall-card h3 {
+  margin: 0 0 15px 0;
+  color: #2d3748;
+  font-size: 22px;
+}
+
+.hall-info p {
+  margin: 8px 0;
+  color: #4a5568;
+  font-size: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.hall-info span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.hall-facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 15px;
+}
+
+.facility-tag {
+  background: #edf2f7;
+  color: #4a5568;
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 13px;
+}
+
+/* Floors Grid */
+.floors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.floor-card {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.floor-card:hover {
+  border-color: #cbd5e0;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.floor-card.selected {
+  border-color: #667eea;
+  background: #ebf4ff;
+}
+
+.floor-card h3 {
+  margin: 0 0 5px 0;
+  color: #2d3748;
+  font-size: 20px;
+}
+
+.floor-number {
+  color: #667eea;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+
+.floor-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.floor-stats .stat {
+  text-align: center;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: #2d3748;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: #718096;
+  margin-top: 4px;
+}
+
+/* Rooms Grid */
+.rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.room-card {
+  background: #f7fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s;
+}
+
+.room-card.available {
+  border-color: #48bb78;
+}
+
+.room-card.occupied {
+  border-color: #f56565;
+  opacity: 0.8;
+}
+
+.room-card.maintenance {
+  border-color: #ed8936;
+  opacity: 0.8;
+}
+
+.room-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.room-header h4 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 18px;
+}
+
+.vacancy-badge {
+  padding: 5px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.vacancy-badge.available {
+  background: #c6f6d5;
+  color: #276749;
+}
+
+.vacancy-badge.occupied {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.vacancy-badge.maintenance {
+  background: #feebc8;
+  color: #c05621;
+}
+
+.room-details p {
+  margin: 8px 0;
+  color: #4a5568;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.room-details span {
+  color: #718096;
+  font-weight: 500;
+}
+
+.room-facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.facility-badge {
+  background: #edf2f7;
+  color: #4a5568;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .guest-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .guest-content {
+    padding: 20px;
+  }
+  
+  .halls-grid,
+  .floors-grid,
+  .rooms-grid {
+    grid-template-columns: 1fr;
+  }
+}
