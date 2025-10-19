@@ -1,4 +1,4 @@
-/* HallDetails.css - Corrected with Proper Scrolling */
+
 
 * {
   box-sizing: border-box;
@@ -110,7 +110,7 @@ body {
   color: #991b1b;
 }
 
-/* Hall Info Section */
+
 .hall-info-section {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -169,7 +169,7 @@ body {
   font-size: 1rem;
 }
 
-/* Manager Display */
+
 .manager-display {
   display: flex;
   align-items: center;

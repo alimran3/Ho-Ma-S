@@ -1,10 +1,10 @@
-/* Guest View Styles */
+
 .guest-view {
   min-height: 100vh;
   background: #f5f7fa;
 }
 
-/* Guest Header */
+
 .guest-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -43,12 +43,12 @@
   box-shadow: 0 5px 15px rgba(255,255,255,0.3);
 }
 
-/* Guest Content */
+
 .guest-content {
   padding: 40px;
 }
 
-/* Sections */
+
 .section {
   background: white;
   border-radius: 15px;
@@ -65,7 +65,7 @@
   border-bottom: 2px solid #e2e8f0;
 }
 
-/* Loading */
+
 .loading {
   text-align: center;
   padding: 40px;
@@ -73,7 +73,7 @@
   font-size: 18px;
 }
 
-/* Halls Grid */
+
 .halls-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -134,7 +134,7 @@
   font-size: 13px;
 }
 
-/* Floors Grid */
+
 .floors-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));

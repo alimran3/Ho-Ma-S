@@ -107,7 +107,7 @@ const LandingPage = () => {
       {/* Left Side - Image */}
       <div className="left-side">
         <img 
-          src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5?ixlib=rb-4.0.3" 
+          src="./djj.jpg" 
           alt="Hostel Building" 
           className="hostel-image"
         />

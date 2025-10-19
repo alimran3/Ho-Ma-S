@@ -1,4 +1,4 @@
-// CreateFloorModal.js
+
 import React, { useState } from 'react';
 import './CreateFloorModal.css';
 
@@ -45,7 +45,7 @@ const CreateFloorModal = ({ onClose, onCreate, hallName }) => {
       roomsPerType: { ...formData.roomsPerType, [type]: numValue }
     });
     
-    // Update total rooms
+    
     const total = Object.values({ ...formData.roomsPerType, [type]: numValue })
       .reduce((sum, count) => sum + count, 0);
     setFormData(prev => ({ ...prev, totalRooms: total.toString() }));

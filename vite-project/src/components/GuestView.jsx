@@ -113,7 +113,7 @@ const GuestView = () => {
           )}
         </div>
 
-        {/* Floors Section */}
+       
         {selectedHall && (
           <div className="section floors-section">
             <h2>Floors in {selectedHall.name}</h2>
@@ -146,7 +146,7 @@ const GuestView = () => {
           </div>
         )}
 
-        {/* Rooms Section */}
+        
         {selectedFloor && (
           <div className="section rooms-section">
             <h2>Room Details - {selectedFloor.name}</h2>
