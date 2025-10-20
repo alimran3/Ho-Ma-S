@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './LandingPage.css';
+import { FaHotel } from "react-icons/fa6";
+
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -107,13 +109,12 @@ const LandingPage = () => {
       {/* Left Side - Image */}
       <div className="left-side">
         <img 
-          src="./djj.jpg" 
+          src="./zikrul.jpg" 
           alt="Hostel Building" 
           className="hostel-image"
         />
         <div className="overlay-content">
           <h1>Hostel Management System</h1>
-          <p>Complete solution for managing your hostel operations efficiently</p>
         </div>
       </div>
 
@@ -133,7 +134,8 @@ const LandingPage = () => {
             <div className="input-group">
               <label>Institute ID</label>
               <div className="input-with-icon">
-                <i className="icon">🏢</i>
+                <i className="icon"><FaHotel style={{color:'red'}}/>
+</i>
                 <input
                   type="text"
                   placeholder="e.g., INST-ABC123"

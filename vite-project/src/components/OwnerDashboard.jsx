@@ -4,10 +4,14 @@ import axios from 'axios';
 import CreateHallModal from './CreateHallModal';
 import HallCard from './HallCard';
 import './OwnerDashboard.css';
+import { FaHotel } from "react-icons/fa6";
+import { SiBookmeter } from "react-icons/si";
+import { FcManager } from "react-icons/fc";
 
-// ---------------------------
-// Axios Interceptors - MOVED OUTSIDE COMPONENT
-// ---------------------------
+
+
+
+
 axios.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -38,7 +42,6 @@ axios.interceptors.response.use(
     if (error.response?.status === 401) {
       console.log('Authentication failed, redirecting to login...');
       localStorage.clear();
-      // Use window.location instead of navigate in interceptor
       window.location.href = '/';
     }
     return Promise.reject(error);
@@ -83,9 +86,7 @@ const OwnerDashboard = () => {
     fetchDashboardData();
   }, [navigate]);
 
-  // ---------------------------
-  // Fetch All Dashboard Data
-  // ---------------------------
+  
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
@@ -93,7 +94,6 @@ const OwnerDashboard = () => {
       
       console.log('Starting to fetch dashboard data...');
 
-      // Use relative URLs since we have base URL in axios interceptors
       const [ownerRes, hallsRes, statsRes] = await Promise.all([
         axios.get('/api/owner/profile'),
         axios.get('/api/halls'),
@@ -170,7 +170,7 @@ const OwnerDashboard = () => {
       <aside className={`dashboard-sidebar ${sidebarCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-brand">
           <div className="brand-logo">
-            <span className="logo-icon">🏢</span>
+            <span className="logo-icon"><FaHotel /></span>
             {!sidebarCollapsed && <span className="logo-text">HMS</span>}
           </div>
           <button 
@@ -194,10 +194,10 @@ const OwnerDashboard = () => {
                 >
                   <span className="nav-icon">
                     {item === 'Dashboard' ? '🏠' : 
-                     item === 'Halls' ? '🏢' : 
-                     item === 'Managers' ? '👨‍💼' : 
+                     item === 'Halls' ? <FaHotel /> : 
+                     item === 'Managers' ? <FcManager /> : 
                      item === 'Students' ? '👥' : 
-                     item === 'Reports' ? '📊' : '⚙️'}
+                     item === 'Reports' ? <SiBookmeter /> : '⚙️'}
                   </span>
                   {!sidebarCollapsed && <span className="nav-text">{item}</span>}
                 </button>
@@ -256,7 +256,7 @@ const OwnerDashboard = () => {
         {/* Stats */}
         <section className="stats-grid">
           {[
-            { title: 'Total Halls', value: stats.totalHalls, icon: '🏢', color: '#667eea' },
+            { title: 'Total Halls', value: stats.totalHalls, icon: <FaHotel />, color: 'gray' },
             { title: 'Total Rooms', value: stats.totalRooms, icon: '🚪', color: '#48bb78' },
             { title: 'Total Capacity', value: stats.totalCapacity, icon: '👥', color: '#ed8936' },
             { title: 'Occupancy Rate', value: getOccupancyRate() + '%', icon: '📊', color: '#e53e3e' },
