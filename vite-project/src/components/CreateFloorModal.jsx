@@ -1,6 +1,6 @@
-
 import React, { useState } from 'react';
 import './CreateFloorModal.css';
+import './CreateHallModal.css';
 
 const CreateFloorModal = ({ onClose, onCreate, hallName }) => {
   const [formData, setFormData] = useState({

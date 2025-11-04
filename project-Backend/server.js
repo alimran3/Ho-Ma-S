@@ -14,6 +14,7 @@ const roomRoutes = require('./routes/rooms');
 const managerRoutes = require('./routes/manager');
 const studentRoutes = require('./routes/student');
 const guestRoutes = require('./routes/guest');
+const paymentRoutes = require('./routes/payments');
 
 // Load environment variables
 dotenv.config();
@@ -26,6 +27,7 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hostel_management', {
@@ -46,6 +48,7 @@ app.use('/api/rooms', roomRoutes);
 app.use('/api/manager', managerRoutes);
 app.use('/api/student', studentRoutes);
 app.use('/api/guest', guestRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

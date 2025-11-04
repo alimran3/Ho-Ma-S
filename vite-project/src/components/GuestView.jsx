@@ -19,7 +19,10 @@ const GuestView = () => {
   const fetchHalls = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:5000/api/guest/halls');
+      const instituteId = localStorage.getItem('instituteId');
+      const response = await axios.get(`/api/guest/halls`, {
+        params: { instituteId }
+      });
       setHalls(response.data);
       setLoading(false);
     } catch (error) {
@@ -31,7 +34,8 @@ const GuestView = () => {
   const fetchFloors = async (hallId) => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/guest/halls/${hallId}/floors`);
+      const response = await axios.get(`/api/guest/halls/${hallId}/floors`);
+
       setFloors(response.data);
       setLoading(false);
     } catch (error) {
@@ -43,7 +47,8 @@ const GuestView = () => {
   const fetchRooms = async (floorId) => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:5000/api/guest/floors/${floorId}/rooms`);
+      const response = await axios.get(`/api/guest/floors/${floorId}/rooms`);
+
       setRooms(response.data);
       setLoading(false);
     } catch (error) {

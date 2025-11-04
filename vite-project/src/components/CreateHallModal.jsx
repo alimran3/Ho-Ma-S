@@ -28,7 +28,7 @@ const CreateHallModal = ({ onClose, onCreate }) => {
   const fetchAvailableManagers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/managers/available', {
+      const response = await axios.get('/api/managers/available', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setManagers(response.data);

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './HallDetails.css';
+import './CreateHallModal.css';
 
 const HallDetails = () => {
   const { hallId } = useParams();
@@ -52,7 +53,7 @@ const HallDetails = () => {
   const fetchHallDetails = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/halls/${hallId}`, {
+      const response = await axios.get(`/api/halls/${hallId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHall(response.data);
@@ -65,7 +66,7 @@ const HallDetails = () => {
   const fetchFloors = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/halls/${hallId}/floors`, {
+      const response = await axios.get(`/api/halls/${hallId}/floors`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setFloors(response.data);
@@ -79,7 +80,7 @@ const HallDetails = () => {
   const fetchManagers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/managers/available', {
+      const response = await axios.get('/api/managers/available', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setManagers(response.data);
@@ -95,7 +96,7 @@ const HallDetails = () => {
       
       // Create manager account
       const managerResponse = await axios.post(
-        'http://localhost:5000/api/managers/create-with-details',
+        '/api/managers/create-with-details',
         {
           ...managerData,
           hallId,
@@ -106,7 +107,7 @@ const HallDetails = () => {
 
       // Assign manager to hall
       await axios.put(
-        `http://localhost:5000/api/halls/${hallId}/assign-manager`,
+        `/api/halls/${hallId}/assign-manager`,
         { managerId: managerResponse.data.manager.id },
         { headers: { Authorization: `Bearer ${token}` }}
       );
@@ -127,7 +128,7 @@ const HallDetails = () => {
       const token = localStorage.getItem('token');
       
       await axios.post(
-        `http://localhost:5000/api/halls/${hallId}/floors/create-with-details`,
+        `/api/halls/${hallId}/floors/create-with-details`,
         floorData,
         { headers: { Authorization: `Bearer ${token}` }}
       );

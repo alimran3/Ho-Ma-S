@@ -9,6 +9,7 @@ import FloorDetails from './components/FloorDetails';
 import ManagerDashboard from './components/ManagerDashboard';
 import StudentDashboard from './components/StudentDashboard';
 import GuestView from './components/GuestView';
+import PaymentResult from './components/PaymentResult';
 import './App.css';
 
 // Protected Route Component
@@ -82,6 +83,11 @@ function App() {
               </ProtectedRoute>
             } 
           />
+          
+          {/* Payment Result Routes (public redirect targets) */}
+          <Route path="/payment/success" element={<PaymentResult type="success" />} />
+          <Route path="/payment/fail" element={<PaymentResult type="fail" />} />
+          <Route path="/payment/cancel" element={<PaymentResult type="cancel" />} />
           
           {/* Guest Routes */}
           <Route 

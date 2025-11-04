@@ -4,12 +4,18 @@ const Hall = require('../models/Hall');
 const Floor = require('../models/Floor');
 const Room = require('../models/Room');
 
-// Get all halls (public info only)
+// Get halls for a specific institute (public info only)
 router.get('/halls', async (req, res) => {
   try {
-    const halls = await Hall.find({ isActive: true })
+    const { instituteId } = req.query;
+
+    if (!instituteId) {
+      return res.status(400).json({ message: 'instituteId is required' });
+    }
+
+    const halls = await Hall.find({ isActive: true, instituteId })
       .select('name type location capacity facilities totalRooms occupiedRooms availableRooms');
-    
+
     res.json(halls);
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });

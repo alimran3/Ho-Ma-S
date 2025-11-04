@@ -26,7 +26,7 @@ const FloorDetails = () => {
   const fetchFloorDetails = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/floors/${floorId}`, {
+      const response = await axios.get(`/api/floors/${floorId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setFloor(response.data);
@@ -38,7 +38,7 @@ const FloorDetails = () => {
   const fetchRooms = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`http://localhost:5000/api/floors/${floorId}/rooms`, {
+      const response = await axios.get(`/api/floors/${floorId}/rooms`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRooms(response.data);
@@ -62,7 +62,7 @@ const FloorDetails = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `http://localhost:5000/api/rooms/${roomId}`,
+        `/api/rooms/${roomId}`,
         roomData,
         { headers: { Authorization: `Bearer ${token}` }}
       );

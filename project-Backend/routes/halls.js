@@ -67,6 +67,8 @@ router.post('/create', auth, isOwner, async (req, res) => {
   try {
     const hallData = {
       ...req.body,
+      // Ensure correct field is stored for manager
+      manager: req.body.managerId || null,
       instituteId: req.user.instituteId
     };
 

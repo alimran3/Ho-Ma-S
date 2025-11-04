@@ -5,6 +5,28 @@ const User = require('../models/User');
 const Manager = require('../models/Manager');
 const Hall = require('../models/Hall');
 
+// Get available managers (not assigned to any hall) for the current institute
+router.get('/available', auth, isOwner, async (req, res) => {
+  try {
+    const instituteId = req.user.instituteId;
+
+    // Users with userType 'manager' and no assigned halls
+    const managers = await User.find({
+      userType: 'manager',
+      instituteId,
+      $or: [
+        { assignedHalls: { $exists: false } },
+        { assignedHalls: { $size: 0 } }
+      ]
+    }).select('_id fullName email');
+
+    res.json(managers);
+  } catch (error) {
+    console.error('Error fetching available managers:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 // Create manager with full details
 router.post('/create-with-details', auth, isOwner, async (req, res) => {
   try {

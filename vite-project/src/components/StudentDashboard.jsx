@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import './StudentDashboard.css';
 
 const StudentDashboard = () => {
@@ -8,9 +9,14 @@ const StudentDashboard = () => {
   const [studentInfo, setStudentInfo] = useState(null);
   const [roommates, setRoommates] = useState([]);
   const [mealHistory, setMealHistory] = useState([]);
+  const [todayMenu, setTodayMenu] = useState({ meals: { breakfast: [], lunch: [], dinner: [] }, mealPrices: { breakfast: 0, lunch: 0, dinner: 0 }, defaultApplied: false });
+  const [selection, setSelection] = useState({ breakfast: true, lunch: false, dinner: false });
+
   const [attendanceHistory, setAttendanceHistory] = useState([]);
   const [showComplaintModal, setShowComplaintModal] = useState(false);
   const [activeTab, setActiveTab] = useState('personal');
+  const [paymentAmount, setPaymentAmount] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('bkash');
   const [complaint, setComplaint] = useState({
     subject: '',
     description: '',
@@ -20,23 +26,30 @@ const StudentDashboard = () => {
   const complaintCategories = [
     { value: 'general', label: 'General Issue' },
     { value: 'maintenance', label: 'Room Maintenance' },
-    { value: 'meal', label: 'Meal Related' },
-    { value: 'security', label: 'Security Concern' },
-    { value: 'roommate', label: 'Roommate Issue' },
-    { value: 'emergency', label: 'Emergency' }
+    { value: 'meal', label: 'Meal Related' }
   ];
 
   useEffect(() => {
     fetchStudentData();
     fetchRoommates();
     fetchMealHistory();
+    fetchTodayMenu();
+    fetchTodaySelection();
     fetchAttendanceHistory();
+    // Handle payment result from SSLCommerz redirect
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const payment = params.get('payment');
+      if (payment === 'success') alert('Payment successful');
+      else if (payment === 'failed') alert('Payment failed');
+      else if (payment === 'cancelled') alert('Payment cancelled');
+    } catch {}
   }, []);
 
   const fetchStudentData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/student/profile', {
+      const response = await axios.get('/api/student/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setStudentInfo(response.data);
@@ -48,10 +61,26 @@ const StudentDashboard = () => {
     }
   };
 
+  const fetchTodaySelection = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await axios.get('/api/student/meals/today', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setSelection({
+        breakfast: true,
+        lunch: !!response.data.lunch,
+        dinner: !!response.data.dinner,
+      });
+    } catch (error) {
+      console.error('Error fetching today selection:', error);
+    }
+  };
+
   const fetchRoommates = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/student/roommates', {
+      const response = await axios.get('/api/student/roommates', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRoommates(response.data);
@@ -63,7 +92,7 @@ const StudentDashboard = () => {
   const fetchMealHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/student/meal-history', {
+      const response = await axios.get('/api/student/meals/history?days=30', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMealHistory(response.data);
@@ -75,7 +104,7 @@ const StudentDashboard = () => {
   const fetchAttendanceHistory = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/student/attendance-history', {
+      const response = await axios.get('/api/student/attendance-history', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setAttendanceHistory(response.data);
@@ -84,16 +113,36 @@ const StudentDashboard = () => {
     }
   };
 
-  const handleToggleMeal = async () => {
+  const fetchTodayMenu = async () => {
     try {
       const token = localStorage.getItem('token');
-      await axios.put('http://localhost:5000/api/student/toggle-meal', {}, {
+      const response = await axios.get('/api/student/menu', {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchStudentData();
+      setTodayMenu(response.data);
+    } catch (error) {
+      console.error('Error fetching today menu:', error);
+    }
+  };
+
+  const isLocked = () => {
+    const now = new Date();
+    const hour = now.getHours();
+    // Allowed window: 22:00 - 10:59
+    const allowed = (hour >= 22) || (hour < 11);
+    return !allowed;
+  };
+
+  const saveSelection = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const payload = { ...selection, breakfast: true };
+      await axios.put('/api/student/meals/select', payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       fetchMealHistory();
     } catch (error) {
-      console.error('Error toggling meal:', error);
+      alert(error.response?.data?.message || 'Failed to save selection');
     }
   };
 
@@ -101,7 +150,13 @@ const StudentDashboard = () => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('http://localhost:5000/api/student/complaint', complaint, {
+      const allowed = ['general','maintenance','meal'];
+      const payload = {
+        subject: (complaint.subject || '').trim(),
+        description: (complaint.description || '').trim(),
+        category: allowed.includes(complaint.category) ? complaint.category : 'general'
+      };
+      await axios.post('/api/student/complaint', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       alert('Complaint submitted successfully!');
@@ -109,13 +164,30 @@ const StudentDashboard = () => {
       setComplaint({ subject: '', description: '', category: 'general' });
     } catch (error) {
       console.error('Error submitting complaint:', error);
-      alert('Failed to submit complaint');
+      alert(error.response?.data?.message || 'Failed to submit complaint');
     }
   };
 
   const handleLogout = () => {
     localStorage.clear();
     navigate('/');
+  };
+
+  const handlePayNow = async () => {
+    try {
+      const amt = Number(paymentAmount);
+      if (!amt || amt <= 0) return alert('Enter a valid amount');
+      const token = localStorage.getItem('token');
+      const res = await axios.post('/api/payment/init', { amount: amt, method: paymentMethod }, { headers: { Authorization: `Bearer ${token}` } });
+      if (res.data?.url) {
+        window.location.href = res.data.url;
+      } else {
+        alert(res.data?.message || 'Failed to initiate payment');
+      }
+    } catch (e) {
+      const detail = e.response?.data?.detail ? `\nDetail: ${JSON.stringify(e.response.data.detail)}` : '';
+      alert((e.response?.data?.message || 'Failed to initiate payment') + detail);
+    }
   };
 
   return (
@@ -230,6 +302,28 @@ const StudentDashboard = () => {
                 </div>
               </div>
             </div>
+
+            <div className="meal-history-card">
+              <h2>Pay Mess Bill</h2>
+              <div className="history-table" style={{padding:12}}>
+                <div style={{display:'flex', gap:10, alignItems:'center', flexWrap:'wrap'}}>
+                  <label>Amount (BDT)
+                    <input type="number" min="1" value={paymentAmount} onChange={(e)=>setPaymentAmount(e.target.value)} style={{marginLeft:8, width:160}} />
+                  </label>
+                  <label>Method
+                    <select value={paymentMethod} onChange={(e)=>setPaymentMethod(e.target.value)} style={{marginLeft:8}}>
+                      <option value="bkash">bKash</option>
+                      <option value="nagad">Nagad</option>
+                      <option value="visa">Visa</option>
+                      <option value="master">Mastercard</option>
+                      <option value="amex">Amex</option>
+                    </select>
+                  </label>
+                  <button className="toggle-meal-btn" onClick={handlePayNow}>Pay Now</button>
+                </div>
+                <div style={{marginTop:8, color:'#6b7280', fontSize:12}}>You will be redirected to SSLCommerz to complete the payment.</div>
+              </div>
+            </div>
           </div>
         )}
 
@@ -237,13 +331,50 @@ const StudentDashboard = () => {
         {activeTab === 'meal' && (
           <div className="tab-content meal-tab">
             <div className="meal-status-card">
-              <h2>Current Meal Status</h2>
+              <h2>Today's Menu</h2>
               <div className="meal-status-display">
-                <div className={`status-circle ${studentInfo?.mealStatus ? 'on' : 'off'}`}>
-                  <span>{studentInfo?.mealStatus ? 'ON' : 'OFF'}</span>
+                <div className="menu-items-view">
+                  <div className="menu-block">
+                    <div className="menu-block-header"><strong>Breakfast</strong> — ৳{todayMenu.mealPrices?.breakfast || 0}</div>
+                    <div className="menu-items">
+                      {(todayMenu.meals?.breakfast || []).length === 0 ? <em>No items</em> : (todayMenu.meals.breakfast).map((it, idx) => (
+                        <span key={idx} className="facility-badge">{it.name} ({it.price})</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="menu-block">
+                    <div className="menu-block-header"><strong>Lunch</strong> — ৳{todayMenu.mealPrices?.lunch || 0}</div>
+                    <div className="menu-items">
+                      {(todayMenu.meals?.lunch || []).length === 0 ? <em>No items</em> : (todayMenu.meals.lunch).map((it, idx) => (
+                        <span key={idx} className="facility-badge">{it.name} ({it.price})</span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="menu-block">
+                    <div className="menu-block-header"><strong>Dinner</strong> — ৳{todayMenu.mealPrices?.dinner || 0}</div>
+                    <div className="menu-items">
+                      {(todayMenu.meals?.dinner || []).length === 0 ? <em>No items</em> : (todayMenu.meals.dinner).map((it, idx) => (
+                        <span key={idx} className="facility-badge">{it.name} ({it.price})</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <button className="toggle-meal-btn" onClick={handleToggleMeal}>
-                  Turn Meal {studentInfo?.mealStatus ? 'OFF' : 'ON'}
+                <div className="meal-toggle-group">
+                  <label>
+                    <input type="checkbox" checked={true} disabled={true} /> Breakfast (mandatory)
+                  </label>
+                  <label>
+                    <input type="checkbox" checked={selection.lunch} disabled={isLocked()} onChange={(e) => setSelection({ ...selection, lunch: e.target.checked })} /> Lunch
+                  </label>
+                  <label>
+                    <input type="checkbox" checked={selection.dinner} disabled={isLocked()} onChange={(e) => setSelection({ ...selection, dinner: e.target.checked })} /> Dinner
+                  </label>
+                </div>
+                <div style={{marginTop:8, color:isLocked()? '#b91c1c':'#4b5563'}}>
+                  {isLocked() ? 'Selections are available between 10:00 PM and 11:00 AM.' : 'You can change your selection now.'}
+                </div>
+                <button className="toggle-meal-btn" onClick={saveSelection} disabled={isLocked()}>
+                  {isLocked() ? 'Selection Locked' : 'Save Selection'}
                 </button>
               </div>
             </div>
@@ -252,20 +383,24 @@ const StudentDashboard = () => {
               <h2>Meal History (Last 7 Days)</h2>
               <div className="history-table">
                 {mealHistory.length > 0 ? (
-                  mealHistory.slice(0, 7).map((entry, index) => (
-                    <div key={index} className="history-row">
-                      <span className="date">
-                        {new Date(entry.date).toLocaleDateString('en-US', {
-                          weekday: 'short',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </span>
-                      <span className={`status-badge ${entry.status ? 'on' : 'off'}`}>
-                        {entry.status ? 'ON' : 'OFF'}
-                      </span>
+                  <>
+                    {mealHistory.slice(0, 7).map((entry, index) => (
+                      <div key={index} className="history-row">
+                        <span className="date">
+                          {new Date(entry.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                        </span>
+                        <span>
+                          B:{entry.meals.breakfast ? '✔' : '✖'} (৳{entry.prices.breakfast}) • L:{entry.meals.lunch ? '✔' : '✖'} (৳{entry.prices.lunch}) • D:{entry.meals.dinner ? '✔' : '✖'} (৳{entry.prices.dinner})
+                        </span>
+                        <span className="status-badge on">৳{entry.dayTotal}</span>
+                      </div>
+                    ))}
+                    <div className="history-row total-row">
+                      <span className="date">Running Total</span>
+                      <span></span>
+                      <span className="status-badge on">৳{mealHistory[0]?.runningTotal || 0}</span>
                     </div>
-                  ))
+                  </>
                 ) : (
                   <p className="no-data">No meal history available</p>
                 )}
