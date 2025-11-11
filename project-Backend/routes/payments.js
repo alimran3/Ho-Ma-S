@@ -91,13 +91,19 @@ router.post('/init', auth, async (req, res) => {
     const payment = await Payment.create({ studentId: student._id, amount: Number(amount), tran_id, status: 'pending' });
 
     // MOCK mode to bypass gateway while store is inactive
-    if (process.env.SSLCZ_MOCK === 'true') {
+    const mockMode = process.env.SSLCZ_MOCK;
+    console.log('SSLCZ_MOCK value:', mockMode, 'Type:', typeof mockMode);
+    if (mockMode === 'true' || mockMode === true) {
+      console.log('Using MOCK mode - bypassing SSLCommerz');
       payment.status = 'success';
       await payment.save();
       return res.json({ url: `${FRONTEND_BASE}/payment/success?tran_id=${encodeURIComponent(tran_id)}`, tran_id, mock: true });
     }
 
+    console.log('Initiating SSLCommerz payment with:', { store_id: STORE_ID, amount: payload.total_amount, tran_id });
     const response = await postForm(SSLZ_API_INIT, payload);
+    console.log('SSLCommerz response:', response);
+    
     if (response?.status === 'SUCCESS' && response.GatewayPageURL) {
       payment.sessionKey = response.sessionkey || response.sessionKey;
       await payment.save();
@@ -106,6 +112,7 @@ router.post('/init', auth, async (req, res) => {
 
     return res.status(502).json({ message: 'SSLCommerz init failed', detail: response });
   } catch (error) {
+    console.error('Payment init error:', error);
     res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
@@ -166,6 +173,16 @@ router.post('/ipn', async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+// Test endpoint to check env variables
+router.get('/test-config', (req, res) => {
+  res.json({
+    SSLCZ_MOCK: process.env.SSLCZ_MOCK,
+    STORE_ID: STORE_ID,
+    FRONTEND_BASE: FRONTEND_BASE,
+    BACKEND_BASE: BACKEND_BASE
+  });
 });
 
 module.exports = router;

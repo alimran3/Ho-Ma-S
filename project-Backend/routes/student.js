@@ -59,9 +59,11 @@ router.get('/meals/today', auth, async (req, res) => {
     if (sel) {
       const resp = sel.toObject();
       resp.breakfast = true; // mandatory
+      resp.mealStatus = student.mealStatus;
       return res.json(resp);
     }
-    res.json({ date, breakfast: true, lunch: false, dinner: false, prices: { breakfast: 0, lunch: 0, dinner: 0 } });
+    // Default: all meals ON if mealStatus is true
+    res.json({ date, breakfast: true, lunch: student.mealStatus, dinner: student.mealStatus, mealStatus: student.mealStatus, prices: { breakfast: 0, lunch: 0, dinner: 0 } });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -105,19 +107,19 @@ router.put('/meals/select', auth, async (req, res) => {
     const student = await Student.findOne({ userId: req.user.userId });
     if (!student) return res.status(404).json({ message: 'Student not found' });
 
-    const { lunch = false, dinner = false } = req.body;
+    const { lunch = true, dinner = true } = req.body;
     const now = new Date();
     const today = normalizeDate(now);
     const nextDay = normalizeDate(new Date(today.getTime() + 24*60*60*1000));
 
-    // Time window checks for today: allowed if (now hour >= 22) OR (now hour < 11)
+    // Time window: For date D, allowed from D-1 22:00 to D 10:59
     const hour = now.getHours();
     const allowed = (hour >= 22) || (hour < 11);
     if (!allowed) {
       return res.status(403).json({ message: 'Selections allowed only between 10:00 PM and 11:00 AM' });
     }
 
-    // Apply selection to D+1 when hour >=22 of D; apply to today when hour <11 (morning window of D+1)
+    // If hour >= 22, select for tomorrow (D+1). If hour < 11, select for today (D)
     const targetDate = (hour >= 22) ? nextDay : today;
 
     // Get prices from daily or default menu
@@ -133,6 +135,7 @@ router.put('/meals/select', auth, async (req, res) => {
       };
     }
 
+    // If mealStatus is OFF, all meals are OFF
     const doc = await MealSelection.findOneAndUpdate(
       { studentId: student._id, date: targetDate },
       {
@@ -140,9 +143,9 @@ router.put('/meals/select', auth, async (req, res) => {
           hallId: student.hallId,
           instituteId: student.instituteId,
           date: targetDate,
-          breakfast: true,
-          lunch: !!lunch,
-          dinner: !!dinner,
+          breakfast: student.mealStatus ? true : false,
+          lunch: student.mealStatus ? !!lunch : false,
+          dinner: student.mealStatus ? !!dinner : false,
           prices
         }
       },
@@ -164,7 +167,7 @@ router.get('/meals/history', auth, async (req, res) => {
     since.setDate(since.getDate() - days);
     since.setHours(0, 0, 0, 0);
 
-    const selections = await MealSelection.find({ studentId: student._id, date: { $gte: since } }).sort('-date');
+    const selections = await MealSelection.find({ studentId: student._id, date: { $gte: since } }).sort('date');
     let running = 0;
     const history = selections.map(s => {
       const dayTotal = (s.breakfast ? (s.prices?.breakfast || 0) : 0) +
@@ -184,7 +187,7 @@ router.get('/meals/history', auth, async (req, res) => {
       };
     });
 
-    res.json(history);
+    res.json(history.reverse());
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
@@ -230,7 +233,7 @@ router.get('/meal-history', auth, async (req, res) => {
   }
 });
 
-// Toggle meal status
+// Toggle meal status (master switch)
 router.put('/toggle-meal', auth, async (req, res) => {
   try {
     const student = await Student.findOne({ userId: req.user.userId });
@@ -245,6 +248,24 @@ router.put('/toggle-meal', auth, async (req, res) => {
       status: student.mealStatus,
       changedBy: req.user.userId
     });
+
+    // Update today's meal selection based on new status
+    const now = new Date();
+    const today = normalizeDate(now);
+    const hour = now.getHours();
+    const targetDate = (hour >= 22) ? normalizeDate(new Date(today.getTime() + 24*60*60*1000)) : today;
+    
+    await MealSelection.findOneAndUpdate(
+      { studentId: student._id, date: targetDate },
+      {
+        $set: {
+          breakfast: student.mealStatus,
+          lunch: student.mealStatus,
+          dinner: student.mealStatus
+        }
+      },
+      { upsert: false }
+    );
 
     res.json({ message: 'Meal status updated', mealStatus: student.mealStatus });
   } catch (error) {
@@ -271,8 +292,9 @@ router.get('/attendance-history', auth, async (req, res) => {
 router.post('/complaint', auth, async (req, res) => {
   try {
     const student = await Student.findOne({ userId: req.user.userId });
+    if (!student) return res.status(404).json({ message: 'Student not found' });
+    
     const { category, subject, description } = req.body;
-
     const complaint = new Complaint({
       studentId: student._id,
       category,
@@ -281,7 +303,6 @@ router.post('/complaint', auth, async (req, res) => {
     });
 
     await complaint.save();
-
     res.status(201).json({ message: 'Complaint submitted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error: error.message });

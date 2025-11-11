@@ -447,4 +447,59 @@ router.put('/payments/:id/receive', auth, isManager, async (req, res) => {
   }
 });
 
+// ======== ROOM MANAGEMENT ========
+// Remove student from room
+router.put('/students/:studentId/remove-room', auth, isManager, async (req, res) => {
+  try {
+    const student = await Student.findById(req.params.studentId);
+    if (!student) return res.status(404).json({ message: 'Student not found' });
+
+    const oldRoom = await Room.findById(student.roomId);
+    if (oldRoom) {
+      oldRoom.occupants = oldRoom.occupants.filter(id => String(id) !== String(student.userId));
+      oldRoom.currentOccupancy = oldRoom.occupants.length;
+      await oldRoom.save();
+    }
+
+    res.json({ message: 'Student removed from room successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
+// Shift student to another room
+router.put('/students/:studentId/shift-room', auth, isManager, async (req, res) => {
+  try {
+    const { newRoomNumber } = req.body;
+    const student = await Student.findById(req.params.studentId);
+    if (!student) return res.status(404).json({ message: 'Student not found' });
+
+    const manager = await Manager.findOne({ userId: req.user.userId });
+    const newRoom = await Room.findOne({ roomNumber: newRoomNumber, hallId: manager.hallId });
+    if (!newRoom) return res.status(404).json({ message: 'New room not found' });
+    if (newRoom.currentOccupancy >= newRoom.capacity) {
+      return res.status(400).json({ message: 'New room is full' });
+    }
+
+    const oldRoom = await Room.findById(student.roomId);
+    if (oldRoom) {
+      oldRoom.occupants = oldRoom.occupants.filter(id => String(id) !== String(student.userId));
+      oldRoom.currentOccupancy = oldRoom.occupants.length;
+      await oldRoom.save();
+    }
+
+    newRoom.occupants.push(student.userId);
+    newRoom.currentOccupancy = newRoom.occupants.length;
+    await newRoom.save();
+
+    student.roomId = newRoom._id;
+    student.roomNumber = newRoom.roomNumber;
+    await student.save();
+
+    res.json({ message: 'Student shifted to new room successfully', newRoomNumber });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
+
 module.exports = router;
