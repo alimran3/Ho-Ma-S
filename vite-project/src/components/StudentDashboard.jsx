@@ -69,11 +69,25 @@ const StudentDashboard = () => {
       });
       setSelection({
         breakfast: true,
-        lunch: !!response.data.lunch,
-        dinner: !!response.data.dinner,
+        lunch: response.data.lunch !== undefined ? !!response.data.lunch : true,
+        dinner: response.data.dinner !== undefined ? !!response.data.dinner : true,
       });
     } catch (error) {
       console.error('Error fetching today selection:', error);
+    }
+  };
+
+  const toggleMealStatus = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      await axios.put('/api/student/toggle-meal', {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      await fetchStudentData();
+      await fetchTodaySelection();
+      alert(`Meal status ${studentInfo?.mealStatus ? 'turned OFF' : 'turned ON'}`);
+    } catch (error) {
+      alert(error.response?.data?.message || 'Failed to toggle meal status');
     }
   };
 
@@ -140,7 +154,9 @@ const StudentDashboard = () => {
       await axios.put('/api/student/meals/select', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      fetchMealHistory();
+      alert('Meal selection saved successfully!');
+      await fetchMealHistory();
+      await fetchTodaySelection();
     } catch (error) {
       alert(error.response?.data?.message || 'Failed to save selection');
     }
@@ -330,6 +346,31 @@ const StudentDashboard = () => {
         {/* Meal Management Tab */}
         {activeTab === 'meal' && (
           <div className="tab-content meal-tab">
+            <div className="meal-status-card" style={{marginBottom:20}}>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20}}>
+                <h2 style={{margin:0}}>Master Meal Control</h2>
+                <div style={{display:'flex', alignItems:'center', gap:15}}>
+                  <span style={{fontSize:'1.1rem', fontWeight:400}}>All Meals: </span>
+                  <label className="toggle-switch" style={{transform:'scale(1.2)'}}>
+                    <input
+                      type="checkbox"
+                      checked={studentInfo?.mealStatus}
+                      onChange={toggleMealStatus}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                  <span style={{fontSize:'1.1rem', fontWeight:600, color: studentInfo?.mealStatus ? '#38a169' : '#e53e3e'}}>
+                    {studentInfo?.mealStatus ? 'ON' : 'OFF'}
+                  </span>
+                </div>
+              </div>
+              <p style={{margin:0, color:'#718096', fontSize:'0.95rem'}}>
+                {studentInfo?.mealStatus 
+                  ? 'Your meals are currently active. You can customize lunch and dinner below.' 
+                  : 'All meals are turned OFF. Turn ON to start receiving meals.'}
+              </p>
+            </div>
+
             <div className="meal-status-card">
               <h2>Today's Menu</h2>
               <div className="meal-status-display">
@@ -361,20 +402,24 @@ const StudentDashboard = () => {
                 </div>
                 <div className="meal-toggle-group">
                   <label>
-                    <input type="checkbox" checked={true} disabled={true} /> Breakfast (mandatory)
+                    <input type="checkbox" checked={studentInfo?.mealStatus && true} disabled={true} /> Breakfast (mandatory)
                   </label>
                   <label>
-                    <input type="checkbox" checked={selection.lunch} disabled={isLocked()} onChange={(e) => setSelection({ ...selection, lunch: e.target.checked })} /> Lunch
+                    <input type="checkbox" checked={studentInfo?.mealStatus && selection.lunch} disabled={!studentInfo?.mealStatus || isLocked()} onChange={(e) => setSelection({ ...selection, lunch: e.target.checked })} /> Lunch
                   </label>
                   <label>
-                    <input type="checkbox" checked={selection.dinner} disabled={isLocked()} onChange={(e) => setSelection({ ...selection, dinner: e.target.checked })} /> Dinner
+                    <input type="checkbox" checked={studentInfo?.mealStatus && selection.dinner} disabled={!studentInfo?.mealStatus || isLocked()} onChange={(e) => setSelection({ ...selection, dinner: e.target.checked })} /> Dinner
                   </label>
                 </div>
-                <div style={{marginTop:8, color:isLocked()? '#b91c1c':'#4b5563'}}>
-                  {isLocked() ? 'Selections are available between 10:00 PM and 11:00 AM.' : 'You can change your selection now.'}
+                <div style={{marginTop:8, color:(!studentInfo?.mealStatus || isLocked())? '#b91c1c':'#4b5563'}}>
+                  {!studentInfo?.mealStatus 
+                    ? 'Turn ON master meal control to select meals.' 
+                    : isLocked() 
+                      ? 'Selections are available between 10:00 PM and 11:00 AM.' 
+                      : 'All meals are ON by default. Uncheck lunch/dinner to turn them OFF.'}
                 </div>
-                <button className="toggle-meal-btn" onClick={saveSelection} disabled={isLocked()}>
-                  {isLocked() ? 'Selection Locked' : 'Save Selection'}
+                <button className="toggle-meal-btn" onClick={saveSelection} disabled={!studentInfo?.mealStatus || isLocked()}>
+                  {!studentInfo?.mealStatus ? 'Meals Turned OFF' : isLocked() ? 'Selection Locked' : 'Save Selection'}
                 </button>
               </div>
             </div>

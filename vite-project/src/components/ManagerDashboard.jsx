@@ -10,6 +10,9 @@ const ManagerDashboard = () => {
   const [students, setStudents] = useState([]);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [showShiftModal, setShowShiftModal] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+  const [newRoomNumber, setNewRoomNumber] = useState('');
   // Complaints management state
   const [complaints, setComplaints] = useState([]);
   const [complaintsLoading, setComplaintsLoading] = useState(false);
@@ -404,59 +407,93 @@ const ManagerDashboard = () => {
           >
             💳 Payments
           </button>
+          <button 
+            className={`section-btn ${activeSection === 'rooms' ? 'active' : ''}`}
+            onClick={() => setActiveSection('rooms')}
+          >
+            🏠 Room Management
+          </button>
         </div>
 
         {/* Content Sections */}
         {activeSection === 'menu' && (
           <div className="menu-editor" style={{width:'100%', margin:0}}>
-            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(200px, 1fr))', gap: 12}}>
-              {[{title:'Breakfast', key:'breakfast'},{title:'Lunch', key:'lunch'},{title:'Dinner', key:'dinner'}].map((sec)=> (
-                <div key={sec.key} style={{background: (sec.key==='breakfast' ? '#FFF7ED' : (sec.key==='lunch' ? '#ECFEFF' : '#FDF2F8')), border:'1px solid #e5e7eb', borderRadius:12, boxShadow:'0 6px 14px rgba(0,0,0,0.06)', overflow:'hidden'}}>
-                  <div style={{padding:'12px 14px', background:'linear-gradient(90deg,#f8fafc,#eef2ff)'}}>
-                    <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-                      <h3 style={{margin:0, fontSize:18}}>{sec.title}</h3>
-                      <span style={{fontSize:12, color:'#6b7280'}}>Edit items below</span>
+            <div style={{background:'white', padding:20, borderRadius:0, border:'1.5px solid rgb(230, 216, 195)', marginBottom:20}}>
+              <h2 style={{margin:0, fontSize:'1.6rem', fontWeight:400, color:'#2d3748'}}>Today's Menu Editor</h2>
+            </div>
+
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap: 20}}>
+              {[{title:'🍳 Breakfast', key:'breakfast', bg:'#FFF7ED', border:'#fed7aa'},{title:'🍛 Lunch', key:'lunch', bg:'#ECFEFF', border:'#a5f3fc'},{title:'🍽️ Dinner', key:'dinner', bg:'#FDF2F8', border:'#fbcfe8'}].map((sec)=> (
+                <div key={sec.key} style={{background: sec.bg, border:`2px solid ${sec.border}`, borderRadius:0, overflow:'hidden', boxShadow:'0 4px 12px rgba(0,0,0,0.08)'}}>
+                  <div style={{padding:'16px 20px', background:'rgba(255,255,255,0.7)', borderBottom:`2px solid ${sec.border}`}}>
+                    <h3 style={{margin:0, fontSize:'1.3rem', fontWeight:400, color:'#2d3748'}}>{sec.title}</h3>
+                    <div style={{marginTop:8, fontSize:'1.1rem', fontWeight:400, color:'#4a5568'}}>Total: ৳{mealPrices[sec.key] || 0}</div>
+                  </div>
+
+                  <div style={{padding:'16px 20px'}}>
+                    <div style={{marginBottom:16}}>
+                      <label style={{display:'block', marginBottom:8, fontSize:'0.9rem', color:'#4a5568', fontWeight:400}}>Quick Add Preset Item</label>
+                      <div style={{display:'flex', gap:8}}>
+                        <select
+                          value={selectedPreset[sec.key] || ''}
+                          onChange={(e)=>setSelectedPreset(prev=>({ ...prev, [sec.key]: e.target.value }))}
+                          style={{flex:1, padding:'10px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}}
+                        >
+                          <option value="">Select an item...</option>
+                          {(presets[sec.key]||[]).map(p => (
+                            <option key={p.name} value={p.name}>{p.name} - ৳{p.price}</option>
+                          ))}
+                        </select>
+                        <button 
+                          type="button" 
+                          onClick={()=>addPreset(sec.key)}
+                          style={{padding:'10px 20px', background:'rgb(93, 134, 108)', color:'white', border:'none', borderRadius:0, cursor:'pointer', fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', fontWeight:400}}
+                        >
+                          Add
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                  {/* end header */}
-                  <div style={{padding:'8px 12px', display:'flex', gap:8, alignItems:'center', flexWrap:'wrap'}}>
-                    <select
-                      value={selectedPreset[sec.key] || ''}
-                      onChange={(e)=>setSelectedPreset(prev=>({ ...prev, [sec.key]: e.target.value }))}
-                      style={{padding:'6px 8px', border:'1px solid #e5e7eb', borderRadius:8}}
-                    >
-                      <option value="">Add preset...</option>
-                      {(presets[sec.key]||[]).map(p => (
-                        <option key={p.name} value={p.name}>{p.name} - ৳{p.price}</option>
-                      ))}
-                    </select>
-                    <button type="button" className="register-student-btn" onClick={()=>addPreset(sec.key)}>Add</button>
-                  </div>
-                  <div style={{padding:12}}>
-                    <MenuItemsEditor
-                      items={dailyMeals[sec.key]}
-                      onChange={(items) => {
-                        const updated = { ...dailyMeals, [sec.key]: items };
-                        setDailyMeals(updated);
-                        const sum = (arr)=> (arr||[]).reduce((t,i)=> t + (Number(i.price)||0), 0);
-                        setMealPrices(prev => ({ ...prev, [sec.key]: sum(items) }));
-                      }}
-                    />
+
+                    <div style={{marginTop:16}}>
+                      <label style={{display:'block', marginBottom:8, fontSize:'0.9rem', color:'#4a5568', fontWeight:400}}>Current Items ({(dailyMeals[sec.key]||[]).length})</label>
+                      <MenuItemsEditor
+                        items={dailyMeals[sec.key]}
+                        onChange={(items) => {
+                          const updated = { ...dailyMeals, [sec.key]: items };
+                          setDailyMeals(updated);
+                          const sum = (arr)=> (arr||[]).reduce((t,i)=> t + (Number(i.price)||0), 0);
+                          setMealPrices(prev => ({ ...prev, [sec.key]: sum(items) }));
+                        }}
+                      />
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{display:'flex', gap:10, marginTop:12, flexWrap:'wrap', alignItems:'center', background:'#fff', border:'1px solid #e5e7eb', borderRadius:12, padding:10}}>
-              <label>Breakfast Price <input type="number" value={mealPrices.breakfast} onChange={(e)=>setMealPrices({ ...mealPrices, breakfast: Number(e.target.value)||0 })} style={{marginLeft:8, width:120}} /></label>
-              <label>Lunch Price <input type="number" value={mealPrices.lunch} onChange={(e)=>setMealPrices({ ...mealPrices, lunch: Number(e.target.value)||0 })} style={{marginLeft:8, width:120}} /></label>
-              <label>Dinner Price <input type="number" value={mealPrices.dinner} onChange={(e)=>setMealPrices({ ...mealPrices, dinner: Number(e.target.value)||0 })} style={{marginLeft:8, width:120}} /></label>
-              <div style={{fontWeight:700, marginLeft:16}}>Total: ৳{(Number(mealPrices.breakfast)||0) + (Number(mealPrices.lunch)||0) + (Number(mealPrices.dinner)||0)}</div>
-              <div style={{marginLeft:'auto'}}>
-                <button className="submit-btn" onClick={saveDailyMenu}>Save Today Menu</button>
+
+            <div style={{marginTop:24, background:'white', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, padding:24}}>
+              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16}}>
+                <div style={{display:'flex', gap:24, flexWrap:'wrap'}}>
+                  <div>
+                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Breakfast Total</div>
+                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.breakfast || 0}</div>
+                  </div>
+                  <div>
+                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Lunch Total</div>
+                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.lunch || 0}</div>
+                  </div>
+                  <div>
+                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Dinner Total</div>
+                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.dinner || 0}</div>
+                  </div>
+                  <div style={{borderLeft:'2px solid rgb(230, 216, 195)', paddingLeft:24}}>
+                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Daily Total</div>
+                    <div style={{fontSize:'1.6rem', fontWeight:400, color:'rgb(93, 134, 108)'}}>৳{(Number(mealPrices.breakfast)||0) + (Number(mealPrices.lunch)||0) + (Number(mealPrices.dinner)||0)}</div>
+                  </div>
+                </div>
+                <button className="submit-btn" onClick={saveDailyMenu} style={{padding:'14px 32px', fontSize:'1rem'}}>💾 Save Today's Menu</button>
               </div>
             </div>
-
-            {/* Default menu section intentionally removed as requested */}
           </div>
         )}
 
@@ -647,21 +684,51 @@ const ManagerDashboard = () => {
           </div>
         )}
 
-        {activeSection === 'room' && (
+        {activeSection === 'rooms' && (
           <div className="room-management">
-            <h2>Room Allocation</h2>
-            <div className="room-allocation-grid">
+            <h2>Room Management</h2>
+            <div className="students-grid">
               {students.map(student => (
-                <div key={student._id} className="student-room-card">
+                <div key={student._id} className="student-meal-card">
                   <h4>{student.fullName}</h4>
-                  <div className="room-info">
-                    <p><strong>Room:</strong> {student.roomNumber}</p>
-                    <p><strong>Floor:</strong> {student.floorNumber}</p>
-                    <p><strong>Department:</strong> {student.department}</p>
+                  <p>Room: {student.roomNumber}</p>
+                  <p>Floor: {student.floorNumber}</p>
+                  <p>ID: {student.studentId}</p>
+                  <p>Department: {student.department}</p>
+                  <div style={{display:'flex', gap:8, marginTop:10}}>
+                    <button 
+                      className="edit-room-btn"
+                      onClick={() => {
+                        setSelectedStudent(student);
+                        setNewRoomNumber('');
+                        setShowShiftModal(true);
+                      }}
+                    >
+                      Shift Room
+                    </button>
+                    <button 
+                      className="edit-room-btn"
+                      style={{background:'#fee2e2', color:'#b91c1c'}}
+                      onClick={async () => {
+                        if (window.confirm(`Remove ${student.fullName} from room ${student.roomNumber}?`)) {
+                          try {
+                            const token = localStorage.getItem('token');
+                            await axios.put(
+                              `/api/manager/students/${student._id}/remove-room`,
+                              {},
+                              { headers: { Authorization: `Bearer ${token}` } }
+                            );
+                            alert('Student removed from room');
+                            fetchStudents();
+                          } catch (error) {
+                            alert(error.response?.data?.message || 'Failed to remove student');
+                          }
+                        }
+                      }}
+                    >
+                      Remove
+                    </button>
                   </div>
-                  <button className="edit-room-btn">
-                    Edit Allocation
-                  </button>
                 </div>
               ))}
             </div>
@@ -669,6 +736,61 @@ const ManagerDashboard = () => {
         )}
       </div>
     </div>
+
+    {/* Shift Room Modal */}
+    {showShiftModal && (
+      <div className="modal-overlay" onClick={() => setShowShiftModal(false)}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h2>Shift Student to New Room</h2>
+            <button className="close-btn" onClick={() => setShowShiftModal(false)}>×</button>
+          </div>
+          <div style={{padding:20}}>
+            <p><strong>Student:</strong> {selectedStudent?.fullName}</p>
+            <p><strong>Current Room:</strong> {selectedStudent?.roomNumber}</p>
+            <div className="form-group" style={{marginTop:20}}>
+              <label>New Room Number *</label>
+              <input
+                type="text"
+                value={newRoomNumber}
+                onChange={(e) => setNewRoomNumber(e.target.value)}
+                placeholder="Enter new room number"
+                required
+              />
+            </div>
+          </div>
+          <div className="modal-actions">
+            <button className="cancel-btn" onClick={() => setShowShiftModal(false)}>
+              Cancel
+            </button>
+            <button 
+              className="submit-btn"
+              onClick={async () => {
+                if (!newRoomNumber) {
+                  alert('Please enter a room number');
+                  return;
+                }
+                try {
+                  const token = localStorage.getItem('token');
+                  await axios.put(
+                    `/api/manager/students/${selectedStudent._id}/shift-room`,
+                    { newRoomNumber },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                  );
+                  alert('Student shifted successfully');
+                  setShowShiftModal(false);
+                  fetchStudents();
+                } catch (error) {
+                  alert(error.response?.data?.message || 'Failed to shift student');
+                }
+              }}
+            >
+              Shift Room
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
 
     {/* Register Student Modal */}
     {showRegisterModal && (
@@ -853,7 +975,6 @@ const MenuItemsEditor = ({ items, onChange }) => {
 
   useEffect(() => { setLocal(items || []); }, [items]);
 
-  const addItem = () => onChange([ ...local, { name: '', price: 0, image: '', description: '' } ]);
   const updateItem = (idx, key, value) => {
     const arr = local.slice();
     arr[idx] = { ...arr[idx], [key]: key === 'price' ? Number(value)||0 : value };
@@ -866,29 +987,46 @@ const MenuItemsEditor = ({ items, onChange }) => {
     onChange(arr);
   };
 
-  return (
-    <div>
-      <div style={{display:'flex', flexDirection:'column', gap:12}}>
-        {local.map((it, idx) => (
-          <div key={idx} style={{display:'grid', gridTemplateColumns:'64px 1fr', gap:10, alignItems:'center', background:'#f9fafb', border:'1px solid #e5e7eb', borderRadius:10, padding:10, maxWidth:'100%'}}>
-            <div style={{width:64, height:64, borderRadius:8, overflow:'hidden', background:'#fff', display:'flex', alignItems:'center', justifyContent:'center', border:'1px solid #e5e7eb'}}>
-              {it.image ? (
-                <img src={it.image} alt={it.name||'item'} style={{width:'100%', height:'100%', objectFit:'cover'}} />
-              ) : (
-                <span style={{fontSize:12, color:'#9ca3af'}}>No Image</span>
-              )}
-            </div>
-            <div style={{display:'grid', gridTemplateColumns:'1fr', gap:8}}>
-              <input type="text" placeholder="Item name" value={it.name||''} onChange={(e)=>updateItem(idx,'name',e.target.value)} style={{padding:'8px 10px', border:'1px solid #e5e7eb', borderRadius:8, minWidth:0, width:'100%'}} />
-              <input type="number" placeholder="Price" value={it.price||0} onChange={(e)=>updateItem(idx,'price',e.target.value)} style={{padding:'8px 10px', border:'1px solid #e5e7eb', borderRadius:8, minWidth:0, width:'100%'}} />
-              <input type="text" placeholder="Image URL (optional)" value={it.image||''} onChange={(e)=>updateItem(idx,'image',e.target.value)} style={{padding:'8px 10px', border:'1px solid #e5e7eb', borderRadius:8, minWidth:0, width:'100%', wordBreak:'break-all'}} />
-            </div>
-            <div style={{gridColumn:'1 / -1', display:'flex', justifyContent:'flex-end'}}>
-              <button type="button" onClick={()=>removeItem(idx)} style={{background:'#fee2e2', color:'#b91c1c', border:'1px solid #fecaca', borderRadius:8, padding:'8px 12px', fontWeight:600}}>Remove</button>
-            </div>
-          </div>
-        ))}
+  if (!local || local.length === 0) {
+    return (
+      <div style={{padding:20, textAlign:'center', color:'#9ca3af', fontSize:'0.9rem', background:'rgba(255,255,255,0.5)', borderRadius:0, border:'1.5px dashed rgb(230, 216, 195)'}}>
+        No items added yet. Use the dropdown above to add items.
       </div>
+    );
+  }
+
+  return (
+    <div style={{display:'flex', flexDirection:'column', gap:10}}>
+      {local.map((it, idx) => (
+        <div key={idx} style={{background:'rgba(255,255,255,0.8)', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, padding:12}}>
+          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8}}>
+            <div style={{fontWeight:400, fontSize:'1rem', color:'#2d3748'}}>{it.name || 'Unnamed Item'}</div>
+            <button 
+              type="button" 
+              onClick={()=>removeItem(idx)} 
+              style={{background:'#fee2e2', color:'#b91c1c', border:'none', borderRadius:0, padding:'6px 12px', fontSize:'0.85rem', cursor:'pointer', fontFamily:'Instrument Serif, serif'}}
+            >
+              ✕ Remove
+            </button>
+          </div>
+          <div style={{display:'grid', gridTemplateColumns:'2fr 1fr', gap:8}}>
+            <input 
+              type="text" 
+              placeholder="Item name" 
+              value={it.name||''} 
+              onChange={(e)=>updateItem(idx,'name',e.target.value)} 
+              style={{padding:'8px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}} 
+            />
+            <input 
+              type="number" 
+              placeholder="Price" 
+              value={it.price||0} 
+              onChange={(e)=>updateItem(idx,'price',e.target.value)} 
+              style={{padding:'8px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}} 
+            />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
