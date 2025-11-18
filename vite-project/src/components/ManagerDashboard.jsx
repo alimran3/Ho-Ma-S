@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './ManagerDashboard.css';
 
+/* Import Agrandir Font */
+import './fonts.css'; // We'll create this for Agrandir
+
 const ManagerDashboard = () => {
   const navigate = useNavigate();
   const [managerInfo, setManagerInfo] = useState(null);
@@ -184,7 +187,7 @@ const ManagerDashboard = () => {
       setDailyMeals(meals);
       setMenuInfo({ defaultApplied: !!res.data.defaultApplied });
       const sum = (arr)=> (arr||[]).reduce((t,i)=> t + (Number(i.price)||0), 0);
-      setMealPrices(res.data.mealPrices || {
+      setMealPrices({
         breakfast: sum(meals.breakfast),
         lunch: sum(meals.lunch),
         dinner: sum(meals.dinner)
@@ -334,9 +337,9 @@ const ManagerDashboard = () => {
 
   return (
     <>
-      <div className="manager-dashboard" style={{width:'100%', maxWidth:'100%', overflowX:'hidden', margin:0, padding:'0 8px'}}>
+      <div className="manager-dashboard">
       {/* Left Sidebar */}
-      <div className="manager-sidebar">
+      <div className="manager-sidebar" style={{height: '100vh', position: 'fixed', left: 0, top: 0, overflowY: 'auto', width: '320px'}}>
         <div className="sidebar-header">
           <h2>Manager Portal</h2>
         </div>
@@ -356,7 +359,7 @@ const ManagerDashboard = () => {
           </div>
         </div>
 
-        <button 
+        <button
           className="register-student-btn"
           onClick={() => setShowRegisterModal(true)}
         >
@@ -369,45 +372,45 @@ const ManagerDashboard = () => {
       </div>
 
       {/* Main Content */}
-      <div className="manager-main" style={{width:'100%', maxWidth:'100%', overflowX:'hidden', padding:'0 8px'}}>
+      <div className="manager-main" style={{marginLeft: '320px'}}>
         <div className="content-header">
           <h1>Hall Management Dashboard</h1>
           <p>Welcome back, {managerInfo?.fullName}</p>
         </div>
 
         {/* Section Buttons */}
-        <div className="section-buttons" style={{display:'flex', flexWrap:'wrap', gap:8}}>
-          <button 
+        <div className="section-buttons">
+          <button
             className={`section-btn ${activeSection === 'menu' ? 'active' : ''}`}
             onClick={() => setActiveSection('menu')}
           >
             🧾 Menu Editor
           </button>
-          <button 
+          <button
             className={`section-btn ${activeSection === 'stats' ? 'active' : ''}`}
             onClick={() => setActiveSection('stats')}
           >
             📊 Meal Stats
           </button>
-          <button 
+          <button
             className={`section-btn ${activeSection === 'meal' ? 'active' : ''}`}
             onClick={() => setActiveSection('meal')}
           >
             🍽️ Meal Management
           </button>
-          <button 
+          <button
             className={`section-btn ${activeSection === 'complaints' ? 'active' : ''}`}
             onClick={() => setActiveSection('complaints')}
           >
             🛠️ Complaints
           </button>
-          <button 
+          <button
             className={`section-btn ${activeSection === 'payments' ? 'active' : ''}`}
             onClick={() => setActiveSection('payments')}
           >
             💳 Payments
           </button>
-          <button 
+          <button
             className={`section-btn ${activeSection === 'rooms' ? 'active' : ''}`}
             onClick={() => setActiveSection('rooms')}
           >
@@ -417,45 +420,153 @@ const ManagerDashboard = () => {
 
         {/* Content Sections */}
         {activeSection === 'menu' && (
-          <div className="menu-editor" style={{width:'100%', margin:0}}>
-            <div style={{background:'white', padding:20, borderRadius:0, border:'1.5px solid rgb(230, 216, 195)', marginBottom:20}}>
-              <h2 style={{margin:0, fontSize:'1.6rem', fontWeight:400, color:'#2d3748'}}>Today's Menu Editor</h2>
+          <div className="menu-editor" style={{width:'100%', maxWidth:'100%', overflow:'hidden'}}>
+            <div style={{
+              backgroundColor: '#1B3C53',
+              padding: '32px 40px',
+              borderRadius: '12px',
+              marginBottom: '40px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <h2 style={{
+                margin: 0,
+                fontSize: '32px',
+                fontWeight: 600,
+                color: '#F9F3EF',
+                position: 'relative',
+                zIndex: 1,
+                letterSpacing: '-0.02em'
+              }}>Menu Editor</h2>
+              <p style={{
+                margin: '12px 0 0 0',
+                color: '#456882',
+                fontSize: '16px',
+                fontWeight: 400,
+                position: 'relative',
+                zIndex: 1
+              }}>Manage your daily meal offerings</p>
             </div>
 
-            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap: 20}}>
-              {[{title:'🍳 Breakfast', key:'breakfast', bg:'#FFF7ED', border:'#fed7aa'},{title:'🍛 Lunch', key:'lunch', bg:'#ECFEFF', border:'#a5f3fc'},{title:'🍽️ Dinner', key:'dinner', bg:'#FDF2F8', border:'#fbcfe8'}].map((sec)=> (
-                <div key={sec.key} style={{background: sec.bg, border:`2px solid ${sec.border}`, borderRadius:0, overflow:'hidden', boxShadow:'0 4px 12px rgba(0,0,0,0.08)'}}>
-                  <div style={{padding:'16px 20px', background:'rgba(255,255,255,0.7)', borderBottom:`2px solid ${sec.border}`}}>
-                    <h3 style={{margin:0, fontSize:'1.3rem', fontWeight:400, color:'#2d3748'}}>{sec.title}</h3>
-                    <div style={{marginTop:8, fontSize:'1.1rem', fontWeight:400, color:'#4a5568'}}>Total: ৳{mealPrices[sec.key] || 0}</div>
+            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap: '24px', width:'100%'}}>
+              {[
+                {title:'Breakfast', key:'breakfast', bg:'#D2C1B6', border:'#456882'},
+                {title:'Lunch', key:'lunch', bg:'#D2C1B6', border:'#456882'},
+                {title:'Dinner', key:'dinner', bg:'#D2C1B6', border:'#456882'}
+              ].map((sec)=> (
+                <div key={sec.key} style={{
+                  backgroundColor: sec.bg,
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                  position: 'relative',
+                  border: `1px solid ${sec.border}`
+                }}
+                >
+                  <div style={{
+                    padding: '24px 28px',
+                    backgroundColor: '#F9F3EF',
+                    position: 'relative',
+                    borderBottom: `1px solid ${sec.border}`
+                  }}>
+                    <h3 style={{
+                      margin: 0,
+                      fontSize: '20px',
+                      fontWeight: 600,
+                      color: '#1B3C53',
+                      marginBottom: '12px',
+                      letterSpacing: '-0.01em'
+                    }}>{sec.title}</h3>
+                    <div style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      backgroundColor: sec.border,
+                      color: '#F9F3EF',
+                      padding: '10px 20px',
+                      borderRadius: '20px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                      letterSpacing: '0.5px'
+                    }}>
+                      <span style={{fontSize: '12px'}}>৳</span>
+                      <span>{mealPrices[sec.key] || 0}</span>
+                    </div>
                   </div>
 
-                  <div style={{padding:'16px 20px'}}>
-                    <div style={{marginBottom:16}}>
-                      <label style={{display:'block', marginBottom:8, fontSize:'0.9rem', color:'#4a5568', fontWeight:400}}>Quick Add Preset Item</label>
-                      <div style={{display:'flex', gap:8}}>
+                  <div style={{padding: '24px 28px'}}>
+                    <div style={{
+                      marginBottom: '24px',
+                      backgroundColor: '#F9F3EF',
+                      border: '1px solid #456882',
+                      borderRadius: '12px',
+                      padding: '20px',
+                      boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+                    }}>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '12px',
+                        fontSize: '14px',
+                        color: '#456882',
+                        fontWeight: 500
+                      }}>
+                        Quick Add Preset Item
+                      </label>
+                      <div style={{display: 'flex', gap: '12px'}}>
                         <select
                           value={selectedPreset[sec.key] || ''}
                           onChange={(e)=>setSelectedPreset(prev=>({ ...prev, [sec.key]: e.target.value }))}
-                          style={{flex:1, padding:'10px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}}
+                          style={{
+                            flex: 1,
+                            padding: '12px 16px',
+                            border: `1px solid #456882`,
+                            borderRadius: '12px',
+                            fontSize: '14px',
+                            backgroundColor: '#F9F3EF',
+                            color: '#1B3C53',
+                            cursor: 'pointer',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                            fontWeight: 400
+                          }}
                         >
                           <option value="">Select an item...</option>
                           {(presets[sec.key]||[]).map(p => (
                             <option key={p.name} value={p.name}>{p.name} - ৳{p.price}</option>
                           ))}
                         </select>
-                        <button 
-                          type="button" 
+                        <button
+                          type="button"
                           onClick={()=>addPreset(sec.key)}
-                          style={{padding:'10px 20px', background:'rgb(93, 134, 108)', color:'white', border:'none', borderRadius:0, cursor:'pointer', fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', fontWeight:400}}
+                          style={{
+                            padding: '12px 24px',
+                            backgroundColor: sec.border,
+                            color: '#F9F3EF',
+                            border: 'none',
+                            borderRadius: '12px',
+                            cursor: 'pointer',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                            letterSpacing: '0.5px'
+                          }}
                         >
                           Add
                         </button>
                       </div>
                     </div>
 
-                    <div style={{marginTop:16}}>
-                      <label style={{display:'block', marginBottom:8, fontSize:'0.9rem', color:'#4a5568', fontWeight:400}}>Current Items ({(dailyMeals[sec.key]||[]).length})</label>
+                    <div style={{marginTop: '24px'}}>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '16px',
+                        fontSize: '14px',
+                        color: '#456882',
+                        fontWeight: 500
+                      }}>
+                        Current Items ({(dailyMeals[sec.key]||[]).length})
+                      </label>
                       <MenuItemsEditor
                         items={dailyMeals[sec.key]}
                         onChange={(items) => {
@@ -464,6 +575,7 @@ const ManagerDashboard = () => {
                           const sum = (arr)=> (arr||[]).reduce((t,i)=> t + (Number(i.price)||0), 0);
                           setMealPrices(prev => ({ ...prev, [sec.key]: sum(items) }));
                         }}
+                        accentColor={sec.border}
                       />
                     </div>
                   </div>
@@ -471,27 +583,96 @@ const ManagerDashboard = () => {
               ))}
             </div>
 
-            <div style={{marginTop:24, background:'white', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, padding:24}}>
-              <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:16}}>
-                <div style={{display:'flex', gap:24, flexWrap:'wrap'}}>
-                  <div>
-                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Breakfast Total</div>
-                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.breakfast || 0}</div>
+            <div style={{
+              marginTop: '32px',
+              backgroundColor: '#F9F3EF',
+              border: '1px solid #456882',
+              borderRadius: '12px',
+              padding: '32px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              position: 'relative',
+              overflow: 'hidden'
+            }}>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '24px',
+                position: 'relative',
+                zIndex: 1
+              }}>
+                <div style={{display: 'flex', gap: '24px', flexWrap: 'wrap'}}>
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '20px 24px',
+                    backgroundColor: '#D2C1B6',
+                    borderRadius: '12px',
+                    border: '1px solid #456882',
+                    minWidth: '120px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+                  }}>
+                    <div style={{fontSize: '12px', color: '#456882', marginBottom: '6px', fontWeight: 500}}>Breakfast</div>
+                    <div style={{fontSize: '20px', fontWeight: 700, color: '#1B3C53'}}>৳{mealPrices.breakfast || 0}</div>
                   </div>
-                  <div>
-                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Lunch Total</div>
-                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.lunch || 0}</div>
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '20px 24px',
+                    backgroundColor: '#D2C1B6',
+                    borderRadius: '12px',
+                    border: '1px solid #456882',
+                    minWidth: '120px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+                  }}>
+                    <div style={{fontSize: '12px', color: '#456882', marginBottom: '6px', fontWeight: 500}}>Lunch</div>
+                    <div style={{fontSize: '20px', fontWeight: 700, color: '#1B3C53'}}>৳{mealPrices.lunch || 0}</div>
                   </div>
-                  <div>
-                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Dinner Total</div>
-                    <div style={{fontSize:'1.4rem', fontWeight:400, color:'#2d3748'}}>৳{mealPrices.dinner || 0}</div>
+                  <div style={{
+                    textAlign: 'center',
+                    padding: '20px 24px',
+                    backgroundColor: '#D2C1B6',
+                    borderRadius: '12px',
+                    border: '1px solid #456882',
+                    minWidth: '120px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+                  }}>
+                    <div style={{fontSize: '12px', color: '#456882', marginBottom: '6px', fontWeight: 500}}>Dinner</div>
+                    <div style={{fontSize: '20px', fontWeight: 700, color: '#1B3C53'}}>৳{mealPrices.dinner || 0}</div>
                   </div>
-                  <div style={{borderLeft:'2px solid rgb(230, 216, 195)', paddingLeft:24}}>
-                    <div style={{fontSize:'0.85rem', color:'#718096', marginBottom:4}}>Daily Total</div>
-                    <div style={{fontSize:'1.6rem', fontWeight:400, color:'rgb(93, 134, 108)'}}>৳{(Number(mealPrices.breakfast)||0) + (Number(mealPrices.lunch)||0) + (Number(mealPrices.dinner)||0)}</div>
+                  <div style={{
+                    borderLeft: '1px solid #456882',
+                    paddingLeft: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center'
+                  }}>
+                    <div style={{fontSize: '12px', color: '#456882', marginBottom: '6px', fontWeight: 500}}>Daily Total</div>
+                    <div style={{
+                      fontSize: '24px',
+                      fontWeight: 800,
+                      color: '#1B3C53',
+                      letterSpacing: '-0.02em'
+                    }}>৳{(Number(mealPrices.breakfast)||0) + (Number(mealPrices.lunch)||0) + (Number(mealPrices.dinner)||0)}</div>
                   </div>
                 </div>
-                <button className="submit-btn" onClick={saveDailyMenu} style={{padding:'14px 32px', fontSize:'1rem'}}>💾 Save Today's Menu</button>
+                <button
+                  className="submit-btn"
+                  onClick={saveDailyMenu}
+                  style={{
+                    padding: '16px 32px',
+                    fontSize: '14px',
+                    backgroundColor: '#1B3C53',
+                    border: 'none',
+                    borderRadius: '12px',
+                    color: '#F9F3EF',
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                    letterSpacing: '0.5px'
+                  }}
+                >
+                  Save Today's Menu
+                </button>
               </div>
             </div>
           </div>
@@ -508,7 +689,15 @@ const ManagerDashboard = () => {
                 <div key={p._id} className="student-meal-card" style={{display:'flex', flexDirection:'column', gap:8}}>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                     <h4 style={{margin:0}}>৳{p.amount} {p.currency}</h4>
-                    <span className={`status ${p.receivedByManager ? 'present' : 'absent'}`} style={{textTransform:'uppercase', fontWeight:700}}>
+                    <span className={`status ${p.receivedByManager ? 'present' : 'absent'}`} style={{
+                      textTransform:'uppercase',
+                      fontWeight:700,
+                      backgroundColor: p.receivedByManager ? '#10B981' : '#F59E0B',
+                      color: '#FFFFFF',
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontSize: '12px'
+                    }}>
                       {p.receivedByManager ? 'Received' : 'Pending' }
                     </span>
                   </div>
@@ -565,7 +754,15 @@ const ManagerDashboard = () => {
                 <div key={c._id} className="student-meal-card" style={{display:'flex', flexDirection:'column', gap:8}}>
                   <div style={{display:'flex', justifyContent:'space-between', alignItems:'center'}}>
                     <h4 style={{margin:0}}>{c.subject || 'No subject'}</h4>
-                    <span className={`status ${c.resolved ? 'present' : 'absent'}`} style={{textTransform:'uppercase', fontWeight:700}}>
+                    <span className={`status ${c.resolved ? 'present' : 'absent'}`} style={{
+                      textTransform:'uppercase',
+                      fontWeight:700,
+                      backgroundColor: c.resolved ? '#10B981' : '#EF4444',
+                      color: '#FFFFFF',
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontSize: '12px'
+                    }}>
                       {c.resolved ? 'Resolved' : 'Unresolved'}
                     </span>
                   </div>
@@ -970,7 +1167,7 @@ const ManagerDashboard = () => {
 };
 
 // Simple inline editor component for menu items
-const MenuItemsEditor = ({ items, onChange }) => {
+const MenuItemsEditor = ({ items, onChange, accentColor }) => {
   const [local, setLocal] = useState(items || []);
 
   useEffect(() => { setLocal(items || []); }, [items]);
@@ -989,41 +1186,158 @@ const MenuItemsEditor = ({ items, onChange }) => {
 
   if (!local || local.length === 0) {
     return (
-      <div style={{padding:20, textAlign:'center', color:'#9ca3af', fontSize:'0.9rem', background:'rgba(255,255,255,0.5)', borderRadius:0, border:'1.5px dashed rgb(230, 216, 195)'}}>
-        No items added yet. Use the dropdown above to add items.
+      <div style={{
+        padding: '40px 32px',
+        textAlign: 'center',
+        color: '#456882',
+        fontSize: '16px',
+        backgroundColor: '#F9F3EF',
+        borderRadius: '12px',
+        border: `1px solid #456882`,
+        position: 'relative',
+        overflow: 'hidden',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+      }}>
+        <div style={{
+          fontSize: '48px',
+          marginBottom: '16px',
+          opacity: 0.5
+        }}>📋</div>
+        <div style={{
+          fontWeight: 600,
+          color: '#1B3C53',
+          position: 'relative',
+          zIndex: 1,
+          fontSize: '18px'
+        }}>No items added yet</div>
+        <div style={{
+          fontSize: '14px',
+          color: '#456882',
+          marginTop: '8px',
+          position: 'relative',
+          zIndex: 1
+        }}>Use the dropdown above to add items</div>
       </div>
     );
   }
 
   return (
-    <div style={{display:'flex', flexDirection:'column', gap:10}}>
+    <div style={{display: 'flex', flexDirection: 'column', gap: '20px'}}>
       {local.map((it, idx) => (
-        <div key={idx} style={{background:'rgba(255,255,255,0.8)', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, padding:12}}>
-          <div style={{display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:8}}>
-            <div style={{fontWeight:400, fontSize:'1rem', color:'#2d3748'}}>{it.name || 'Unnamed Item'}</div>
-            <button 
-              type="button" 
-              onClick={()=>removeItem(idx)} 
-              style={{background:'#fee2e2', color:'#b91c1c', border:'none', borderRadius:0, padding:'6px 12px', fontSize:'0.85rem', cursor:'pointer', fontFamily:'Instrument Serif, serif'}}
+        <div key={idx} style={{
+          backgroundColor: '#F9F3EF',
+          border: `1px solid #456882`,
+          borderRadius: '12px',
+          padding: '24px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}
+        >
+          <div style={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            alignItems: 'center',
+            marginBottom: '20px',
+            position: 'relative',
+            zIndex: 1
+          }}>
+            <button
+              type="button"
+              onClick={()=>removeItem(idx)}
+              style={{
+                backgroundColor: '#456882',
+                color: '#F9F3EF',
+                border: 'none',
+                borderRadius: '12px',
+                padding: '10px 20px',
+                fontSize: '14px',
+                cursor: 'pointer',
+                fontWeight: 600,
+                boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+                letterSpacing: '0.5px'
+              }}
             >
-              ✕ Remove
+              Remove
             </button>
           </div>
-          <div style={{display:'grid', gridTemplateColumns:'2fr 1fr', gap:8}}>
-            <input 
-              type="text" 
-              placeholder="Item name" 
-              value={it.name||''} 
-              onChange={(e)=>updateItem(idx,'name',e.target.value)} 
-              style={{padding:'8px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}} 
-            />
-            <input 
-              type="number" 
-              placeholder="Price" 
-              value={it.price||0} 
-              onChange={(e)=>updateItem(idx,'price',e.target.value)} 
-              style={{padding:'8px 12px', border:'1.5px solid rgb(230, 216, 195)', borderRadius:0, fontSize:'0.9rem', fontFamily:'Instrument Serif, serif', background:'white'}} 
-            />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: '2fr 1fr',
+            gap: '16px',
+            alignItems: 'end',
+            position: 'relative',
+            zIndex: 1
+          }}>
+            <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
+              <label style={{
+                fontSize: '12px',
+                fontWeight: 600,
+                color: '#456882',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>Name</label>
+              <input
+                type="text"
+                placeholder="Enter item name"
+                value={it.name||''}
+                onChange={(e)=>updateItem(idx,'name',e.target.value)}
+                style={{
+                  padding: '14px 16px',
+                  border: `1px solid #456882`,
+                  borderRadius: '8px',
+                  fontSize: '14px',
+                  backgroundColor: '#FFFFFF',
+                  color: '#1B3C53',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+                  fontWeight: 400,
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}
+              />
+            </div>
+
+            <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
+              <label style={{
+                fontSize: '12px',
+                fontWeight: 600,
+                color: '#456882',
+                textTransform: 'uppercase',
+                letterSpacing: '1px'
+              }}>Price</label>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: '#FFFFFF',
+                border: `1px solid #456882`,
+                borderRadius: '8px',
+                padding: '14px 16px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.04)'
+              }}>
+                <span style={{
+                  color: '#456882',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  marginRight: '8px'
+                }}>৳</span>
+                <input
+                  type="number"
+                  placeholder="0"
+                  value={it.price||0}
+                  onChange={(e)=>updateItem(idx,'price',e.target.value)}
+                  style={{
+                    border: 'none',
+                    outline: 'none',
+                    backgroundColor: 'transparent',
+                    color: '#1B3C53',
+                    fontSize: '14px',
+                    fontWeight: 400,
+                    width: '100%',
+                    textAlign: 'left'
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       ))}

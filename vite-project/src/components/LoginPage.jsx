@@ -144,14 +144,52 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page-container">
-      <div className="login-card">
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#1B3C53',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px'
+    }}>
+      <div style={{
+        backgroundColor: '#F9F3EF',
+        padding: '50px 40px',
+        borderRadius: '20px',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+        width: '100%',
+        maxWidth: '450px',
+        border: '1px solid #456882'
+      }}>
         {/* Header */}
-        <div className="login-header">
-          <div className="login-icon">{getUserIcon()}</div>
-          <h2>{getUserTypeDisplay()} Login</h2>
-          <p>Institute ID: {instituteId}</p>
-          <small>Backend: http://localhost:5000</small>
+        <div style={{
+          textAlign: 'center',
+          marginBottom: '40px'
+        }}>
+          <div style={{
+            width: '100px',
+            height: '100px',
+            backgroundColor: '#456882',
+            borderRadius: '20px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 25px',
+            fontSize: '3rem',
+            color: '#F9F3EF'
+          }}>{getUserIcon()}</div>
+          <h2 style={{
+            color: '#1B3C53',
+            marginBottom: '15px',
+            fontWeight: 700,
+            fontSize: '2rem',
+            letterSpacing: '-0.02em'
+          }}>{getUserTypeDisplay()} Login</h2>
+          <p style={{
+            color: '#456882',
+            fontSize: '1rem',
+            fontWeight: 500
+          }}>Institute ID: {instituteId}</p>
         </div>
 
         {/* Form */}

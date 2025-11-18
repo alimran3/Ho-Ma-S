@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './HallDetails.css';
 import './CreateHallModal.css';
+import { FaHotel } from "react-icons/fa6";
 
 const HallDetails = () => {
   const { hallId } = useParams();
@@ -184,124 +185,345 @@ const HallDetails = () => {
   }
 
   return (
-    <div className="hall-details-page">
-      <div className="hall-details-content">
-        {/* Header */}
-        <div className="details-header">
-          <button className="back-button" onClick={() => navigate('/owner/dashboard')}>
-            <span>←</span> Back to Dashboard
-          </button>
-          <div className="header-info">
-            <h1>{hall.name}</h1>
-            <span className={`status-badge ${hall.isActive ? 'active' : 'inactive'}`}>
+    <div style={{display: 'flex', minHeight: '100vh', backgroundColor: '#F9F3EF'}}>
+      {/* Left Sidebar */}
+      <div style={{
+        width: '320px',
+        height: '100vh',
+        position: 'fixed',
+        left: 0,
+        top: 0,
+        overflowY: 'auto',
+        backgroundColor: '#1B3C53',
+        color: '#F9F3EF',
+        padding: '24px'
+      }}>
+        <div style={{marginBottom: '32px'}}>
+          <h2 style={{
+            margin: 0,
+            fontSize: '1.5rem',
+            fontWeight: 600,
+            marginBottom: '8px'
+          }}>Hall Management</h2>
+          <p style={{
+            margin: 0,
+            color: '#456882',
+            fontSize: '0.9rem'
+          }}>Manage your hall operations</p>
+        </div>
+
+        <div style={{
+          backgroundColor: '#456882',
+          borderRadius: '12px',
+          padding: '20px',
+          marginBottom: '24px'
+        }}>
+          <h3 style={{
+            margin: '0 0 12px 0',
+            fontSize: '1.2rem',
+            fontWeight: 600
+          }}>{hall?.name || 'Hall Details'}</h3>
+          <div style={{display: 'grid', gap: '8px'}}>
+            <p style={{margin: 0, fontSize: '0.9rem'}}>
+              <span style={{color: '#D2C1B6'}}>Location:</span> {hall?.location}
+            </p>
+            <p style={{margin: 0, fontSize: '0.9rem'}}>
+              <span style={{color: '#D2C1B6'}}>Type:</span> {hall?.type} Hall
+            </p>
+            <p style={{margin: 0, fontSize: '0.9rem'}}>
+              <span style={{color: '#D2C1B6'}}>Capacity:</span> {hall?.capacity} students
+            </p>
+            <p style={{margin: 0, fontSize: '0.9rem'}}>
+              <span style={{color: '#D2C1B6'}}>Floors:</span> {hall?.totalFloors || 0}
+            </p>
+            <p style={{margin: 0, fontSize: '0.9rem'}}>
+              <span style={{color: '#D2C1B6'}}>Rooms:</span> {hall?.totalRooms || 0}
+            </p>
+          </div>
+        </div>
+
+        <div style={{
+          backgroundColor: '#456882',
+          borderRadius: '12px',
+          padding: '20px'
+        }}>
+          <h4 style={{
+            margin: '0 0 12px 0',
+            fontSize: '1.1rem',
+            fontWeight: 600
+          }}>Current Manager</h4>
+          {hall?.manager ? (
+            <div style={{display: 'grid', gap: '8px'}}>
+              <div style={{
+                width: '50px',
+                height: '50px',
+                borderRadius: '50%',
+                backgroundColor: '#F9F3EF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#1B3C53',
+                fontSize: '1.2rem',
+                fontWeight: 'bold',
+                margin: '0 auto 12px'
+              }}>
+                {hall.manager.fullName?.charAt(0)?.toUpperCase() || 'M'}
+              </div>
+              <p style={{margin: 0, fontSize: '0.9rem', textAlign: 'center', fontWeight: 600}}>
+                {hall.manager.fullName}
+              </p>
+              <p style={{margin: 0, fontSize: '0.8rem', textAlign: 'center', color: '#D2C1B6'}}>
+                {hall.manager.email}
+              </p>
+            </div>
+          ) : (
+            <p style={{margin: 0, color: '#D2C1B6', fontSize: '0.9rem', textAlign: 'center'}}>
+              No manager assigned
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div style={{marginLeft: '320px', padding: '24px', width: '100%'}}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          marginBottom: '32px',
+          backgroundColor: '#1B3C53',
+          color: '#F9F3EF',
+          padding: '24px',
+          borderRadius: '12px'
+        }}>
+          <div>
+            <button
+              onClick={() => navigate('/owner/dashboard')}
+              style={{
+                backgroundColor: '#456882',
+                color: '#F9F3EF',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '8px 16px',
+                cursor: 'pointer',
+                marginRight: '16px',
+                fontSize: '1rem'
+              }}
+            >
+              ← Back to Dashboard
+            </button>
+            <h1 style={{
+              margin: 0,
+              fontSize: '2rem',
+              fontWeight: 600,
+              display: 'inline'
+            }}>{hall.name}</h1>
+            <span style={{
+              backgroundColor: hall.isActive ? '#10B981' : '#EF4444',
+              color: '#FFFFFF',
+              padding: '4px 12px',
+              borderRadius: '20px',
+              fontSize: '0.9rem',
+              marginLeft: '12px'
+            }}>
               {hall.isActive ? '● Active' : '○ Inactive'}
             </span>
           </div>
         </div>
 
-        {/* Hall Info Section */}
-        <div className="hall-info-section">
-          <div className="info-card">
-            <h3>Hall Information</h3>
-            <div className="info-grid">
-              <div className="info-row">
-                <span>Location:</span>
-                <strong>{hall.location}</strong>
-              </div>
-              <div className="info-row">
-                <span>Type:</span>
-                <strong>{hall.type} Hall</strong>
-              </div>
-              <div className="info-row">
-                <span>Capacity:</span>
-                <strong>{hall.capacity} students</strong>
-              </div>
-              <div className="info-row">
-                <span>Total Floors:</span>
-                <strong>{hall.totalFloors || 0}</strong>
-              </div>
-              <div className="info-row">
-                <span>Total Rooms:</span>
-                <strong>{hall.totalRooms || 0}</strong>
-              </div>
-              <div className="info-row">
-                <span>Occupied:</span>
-                <strong>{hall.occupiedRooms || 0} rooms</strong>
-              </div>
-            </div>
-          </div>
-
-          {/* Current Manager Info */}
-          {hall.manager && (
-            <div className="info-card">
-              <h3>Current Manager</h3>
-              <div className="manager-display">
-                <div className="manager-avatar">
-                  {hall.manager.fullName.charAt(0)}
-                </div>
-                <div className="manager-details">
-                  <h4>{hall.manager.fullName}</h4>
-                  <p>📧 {hall.manager.email}</p>
-                  <p>📱 {hall.manager.phone || 'No phone'}</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
         {/* Action Cards */}
-        <div className="action-cards">
-          <div className="action-card manager-card" onClick={() => setShowAssignManager(true)}>
-            <div className="action-icon">👨‍💼</div>
-            <h3>Manager Assignment</h3>
-            <p>{hall.manager ? 'Change current manager' : 'Assign a new manager'}</p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+          gap: '20px',
+          marginBottom: '32px'
+        }}>
+          <div
+            onClick={() => setShowAssignManager(true)}
+            style={{
+              backgroundColor: '#F9F3EF',
+              border: '1px solid #456882',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{
+              width: '60px',
+              height: '60px',
+              backgroundColor: '#1B3C53',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+              fontSize: '1.5rem',
+              color: '#F9F3EF'
+            }}>👨‍💼</div>
+            <h3 style={{
+              margin: '0 0 8px 0',
+              color: '#1B3C53',
+              fontSize: '1.3rem',
+              fontWeight: 600
+            }}>Manager Assignment</h3>
+            <p style={{
+              margin: 0,
+              color: '#456882',
+              fontSize: '0.95rem'
+            }}>{hall.manager ? 'Change current manager' : 'Assign a new manager'}</p>
           </div>
 
-          <div className="action-card floor-card" onClick={() => setShowCreateFloor(true)}>
-            <div className="action-icon">🏢</div>
-            <h3>Add Floor</h3>
-            <p>Create new floor with rooms</p>
+          <div
+            onClick={() => setShowCreateFloor(true)}
+            style={{
+              backgroundColor: '#F9F3EF',
+              border: '1px solid #456882',
+              borderRadius: '12px',
+              padding: '24px',
+              cursor: 'pointer',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              textAlign: 'center'
+            }}
+          >
+            <div style={{
+              width: '60px',
+              height: '60px',
+              backgroundColor: '#1B3C53',
+              borderRadius: '12px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+              fontSize: '1.5rem',
+              color: '#F9F3EF'
+            }}>🏢</div>
+            <h3 style={{
+              margin: '0 0 8px 0',
+              color: '#1B3C53',
+              fontSize: '1.3rem',
+              fontWeight: 600
+            }}>Add Floor</h3>
+            <p style={{
+              margin: 0,
+              color: '#456882',
+              fontSize: '0.95rem'
+            }}>Create new floor with rooms</p>
           </div>
         </div>
 
-        {/* Floor Management Section - FULL WIDTH ROW LAYOUT */}
-        <div className="floors-section">
-          <h2>Floor Management</h2>
-          
+
+
+        {/* Floor Management Section */}
+        <div style={{
+          backgroundColor: '#F9F3EF',
+          border: '1px solid #456882',
+          borderRadius: '12px',
+          padding: '24px',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+        }}>
+          <h2 style={{
+            margin: '0 0 24px 0',
+            color: '#1B3C53',
+            fontSize: '1.8rem',
+            fontWeight: 600
+          }}>Floor Management</h2>
+
           {floors.length === 0 ? (
-            <div className="empty-state">
-              <p>No floors created yet. Click "Add Floor" to create your first floor.</p>
+            <div style={{
+              textAlign: 'center',
+              padding: '40px 20px',
+              color: '#456882'
+            }}>
+              <p style={{
+                margin: 0,
+                fontSize: '1.1rem'
+              }}>No floors created yet. Click "Add Floor" to create your first floor.</p>
             </div>
           ) : (
-            <div className="floors-container">
-              <div className="floors-wrapper">
-                {floors.map((floor) => (
-                  <div key={floor._id} className="floor-card">
-                    <div className="floor-header">
-                      <h3>{floor.name}</h3>
-                      <span className="floor-badge">Floor {floor.floorNumber}</span>
-                    </div>
-                    <p className="floor-description">{floor.description || 'No description'}</p>
-                    <div className="floor-facilities">
-                      {floor.facilities?.map((facility, idx) => (
-                        <span key={idx} className="facility-tag">{facility}</span>
-                      ))}
-                    </div>
-                    <div className="floor-stats">
-                      <span>Total Rooms: {floor.totalRooms}</span>
-                      <span>•</span>
-                      <span>Occupied: {floor.occupiedRooms || 0}</span>
-                    </div>
-                    
-                    <button 
-                      className="view-rooms-btn"
-                      onClick={() => navigate(`/owner/floor/${floor._id}`)}
-                    >
-                      View & Edit Rooms
-                    </button>
+            <div style={{display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px'}}>
+              {floors.map((floor) => (
+                <div key={floor._id} style={{
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #D2C1B6',
+                  borderRadius: '12px',
+                  padding: '20px',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.04)'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '12px'
+                  }}>
+                    <h3 style={{
+                      margin: 0,
+                      color: '#1B3C53',
+                      fontSize: '1.3rem',
+                      fontWeight: 600
+                    }}>{floor.name}</h3>
+                    <span style={{
+                      backgroundColor: '#456882',
+                      color: '#F9F3EF',
+                      padding: '4px 12px',
+                      borderRadius: '20px',
+                      fontSize: '0.8rem',
+                      fontWeight: 500
+                    }}>Floor {floor.floorNumber}</span>
                   </div>
-                ))}
-              </div>
+                  <p style={{
+                    margin: '0 0 16px 0',
+                    color: '#456882',
+                    fontSize: '0.95rem'
+                  }}>{floor.description || 'No description'}</p>
+                  <div style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '6px',
+                    marginBottom: '16px'
+                  }}>
+                    {floor.facilities?.map((facility, idx) => (
+                      <span key={idx} style={{
+                        backgroundColor: '#D2C1B6',
+                        color: '#1B3C53',
+                        padding: '2px 8px',
+                        borderRadius: '12px',
+                        fontSize: '0.75rem',
+                        fontWeight: 500
+                      }}>{facility}</span>
+                    ))}
+                  </div>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '16px',
+                    fontSize: '0.9rem',
+                    color: '#456882'
+                  }}>
+                    <span>Total Rooms: {floor.totalRooms}</span>
+                    <span>Occupied: {floor.occupiedRooms || 0}</span>
+                  </div>
+
+                  <button
+                    onClick={() => navigate(`/owner/floor/${floor._id}`)}
+                    style={{
+                      width: '100%',
+                      padding: '12px',
+                      backgroundColor: '#456882',
+                      color: '#F9F3EF',
+                      border: 'none',
+                      borderRadius: '8px',
+                      fontSize: '1rem',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    View & Edit Rooms
+                  </button>
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -309,11 +531,57 @@ const HallDetails = () => {
 
       {/* Manager Assignment Modal */}
       {showAssignManager && (
-        <div className="modal-overlay" onClick={() => setShowAssignManager(false)}>
-          <div className="modal-content large-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Manager Assignment</h2>
-              <button className="close-btn" onClick={() => setShowAssignManager(false)}>×</button>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }} onClick={() => setShowAssignManager(false)}>
+          <div style={{
+            backgroundColor: '#F9F3EF',
+            borderRadius: '12px',
+            padding: '24px',
+            maxWidth: '600px',
+            width: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #456882'
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '24px'
+            }}>
+              <h2 style={{
+                margin: 0,
+                color: '#1B3C53',
+                fontSize: '1.5rem',
+                fontWeight: 600
+              }}>Manager Assignment</h2>
+              <button
+                onClick={() => setShowAssignManager(false)}
+                style={{
+                  backgroundColor: '#456882',
+                  color: '#F9F3EF',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >×</button>
             </div>
             <form onSubmit={handleAssignManager} className="manager-form">
               <div className="form-grid">
@@ -473,11 +741,57 @@ const HallDetails = () => {
 
       {/* Create Floor Modal */}
       {showCreateFloor && (
-        <div className="modal-overlay" onClick={() => setShowCreateFloor(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Add New Floor</h2>
-              <button className="close-btn" onClick={() => setShowCreateFloor(false)}>×</button>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }} onClick={() => setShowCreateFloor(false)}>
+          <div style={{
+            backgroundColor: '#F9F3EF',
+            borderRadius: '12px',
+            padding: '24px',
+            maxWidth: '500px',
+            width: '90%',
+            maxHeight: '90vh',
+            overflowY: 'auto',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+            border: '1px solid #456882'
+          }} onClick={(e) => e.stopPropagation()}>
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: '24px'
+            }}>
+              <h2 style={{
+                margin: 0,
+                color: '#1B3C53',
+                fontSize: '1.5rem',
+                fontWeight: 600
+              }}>Add New Floor</h2>
+              <button
+                onClick={() => setShowCreateFloor(false)}
+                style={{
+                  backgroundColor: '#456882',
+                  color: '#F9F3EF',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: '32px',
+                  height: '32px',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >×</button>
             </div>
             <form onSubmit={handleCreateFloor} className="floor-form">
               <div className="form-group">

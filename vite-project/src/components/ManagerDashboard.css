@@ -1,5 +1,4 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+/* Agrandir Font is imported in fonts.css */
 
 /* Reset */
 * {
@@ -12,7 +11,11 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F9F3EF;
+  color: #1B3C53;
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* Manager Dashboard */
@@ -20,16 +23,18 @@ body {
   display: flex;
   min-height: 100vh;
   width: 100%;
-  background: rgb(245, 245, 240);
-  font-family: 'Instrument Serif', serif;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: #F9F3EF;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Manager Sidebar */
 .manager-sidebar {
   width: 280px;
   min-width: 280px;
-  background: white;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+  background-color: #D2C1B6;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -39,246 +44,238 @@ body {
 }
 
 .sidebar-header {
-  padding: 30px 25px;
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  color: white;
+  padding: 32px 24px;
+  background-color: #1B3C53;
+  color: #F9F3EF;
 }
 
 .sidebar-header h2 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 400;
-  letter-spacing: 0.5px;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 .manager-info-card {
-  padding: 30px 25px;
+  padding: 32px 24px;
   text-align: center;
-  border-bottom: 1px solid rgb(230, 216, 195);
+  border-bottom: 1px solid #456882;
 }
 
 .manager-avatar {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  border-radius: 0px;
+  background-color: #456882;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 15px;
-  font-size: 2rem;
-  color: white;
-  font-weight: 400;
+  margin: 0 auto 16px;
+  font-size: 32px;
+  color: #F9F3EF;
+  font-weight: 600;
 }
 
 .manager-info-card h3 {
-  margin: 0 0 5px 0;
-  color: #2d3748;
-  font-size: 1.4rem;
-  font-weight: 400;
+  margin: 0 0 8px 0;
+  color: #1B3C53;
+  font-size: 20px;
+  font-weight: 500;
 }
 
 .manager-role {
-  color: #718096;
-  font-size: 1rem;
-  margin-bottom: 20px;
-  font-style: italic;
+  color: #456882;
+  font-size: 14px;
+  margin-bottom: 24px;
+  font-weight: 400;
 }
 
 .manager-details {
   text-align: left;
-  background: rgb(245, 245, 240);
-  padding: 15px;
-  border-radius: 0px;
+  background-color: #F9F3EF;
+  padding: 16px;
+  border-radius: 12px;
 }
 
 .manager-details p {
   margin: 8px 0;
-  color: #4a5568;
-  font-size: 0.9rem;
+  color: #456882;
+  font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .manager-details span {
-  font-size: 1rem;
+  font-size: 16px;
 }
 
 .register-student-btn {
-  margin: 20px;
-  padding: 15px;
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  color: white;
+  margin: 24px 24px 16px;
+  padding: 16px;
+  background-color: #1B3C53;
+  color: #F9F3EF;
   border: none;
-  border-radius: 0px;
-  font-size: 1rem;
-  font-weight: 400;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  transition: all 0.3s;
-  font-family: 'Instrument Serif', serif;
+  gap: 8px;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.5px;
 }
 
-.register-student-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(93, 134, 108, 0.3);
-}
-
 .logout-btn {
-  margin: auto 20px 20px;
+  margin: auto 24px 24px;
   padding: 12px;
-  background: #e53e3e;
-  color: white;
+  background-color: #456882;
+  color: #F9F3EF;
   border: none;
-  border-radius: 0px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: 16px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-family: 'Instrument Serif', serif;
-  transition: all 0.3s;
-}
-
-.logout-btn:hover {
-  background: #c53030;
-  transform: translateY(-1px);
+  gap: 8px;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Main Content */
 .manager-main {
   flex: 1;
   overflow-y: auto;
-  padding: 40px;
-  width: 100%;
+  padding: 30px 20px;
+  width: 90%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .manager-main {
+    width: 85%;
+    padding: 40px 30px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .manager-main {
+    width: 80%;
+    padding: 40px 40px;
+  }
 }
 
 .content-header {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .content-header h1 {
-  margin: 0 0 5px 0;
-  color: #2d3748;
-  font-size: 2.2rem;
-  font-weight: 400;
-  letter-spacing: 0px;
+  margin: 0 0 8px 0;
+  color: #1B3C53;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .content-header p {
-  color: #718096;
-  font-size: 1.1rem;
-  font-style: italic;
+  color: #456882;
+  font-size: 16px;
+  font-weight: 400;
 }
 
 /* Section Buttons */
 .section-buttons {
   display: flex;
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 16px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
 }
 
 .section-btn {
   flex: 1;
   min-width: 200px;
-  padding: 18px 20px;
-  background: white;
-  border: 1.5px solid rgb(230, 216, 195);
-  border-radius: 0px;
-  font-size: 1rem;
-  font-weight: 400;
+  padding: 16px 20px;
+  background-color: #F9F3EF;
+  border: 1px solid #456882;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  font-family: 'Instrument Serif', serif;
+  gap: 8px;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.5px;
 }
 
-.section-btn:hover {
-  border-color: rgb(93, 134, 108);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
 .section-btn.active {
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  color: white;
-  border-color: transparent;
+  background-color: #1B3C53;
+  color: #F9F3EF;
+  border-color: #1B3C53;
 }
 
 /* Content Section */
 .content-section {
-  background: white;
-  border-radius: 0px;
+  background-color: #D2C1B6;
+  border-radius: 12px;
   padding: 40px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 /* Meal Management */
 .meal-management h2,
 .attendance-management h2,
 .room-management h2 {
-  margin: 0 0 25px 0;
-  color: #2d3748;
-  font-size: 1.6rem;
-  font-weight: 400;
+  margin: 0 0 24px 0;
+  color: #1B3C53;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .students-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  margin-bottom: 30px;
+  gap: 24px;
+  margin-bottom: 32px;
 }
 
 .student-meal-card {
-  background: rgb(245, 245, 240);
-  border: 1.5px solid rgb(230, 216, 195);
-  border-radius: 0px;
-  padding: 20px;
-  transition: all 0.3s;
-}
-
-.student-meal-card:hover {
-  border-color: rgb(194, 166, 140);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background-color: #D2C1B6;
+  border: 1px solid #456882;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .student-meal-card h4 {
-  margin: 0 0 10px 0;
-  color: #2d3748;
-  font-size: 1.1rem;
-  font-weight: 400;
+  margin: 0 0 12px 0;
+  color: #1B3C53;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .student-meal-card p {
-  margin: 5px 0;
-  color: #4a5568;
-  font-size: 0.9rem;
+  margin: 8px 0;
+  color: #456882;
+  font-size: 14px;
 }
 
 .meal-toggle {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-top: 15px;
+  gap: 16px;
+  margin-top: 16px;
 }
 
 /* Toggle Switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
+  width: 48px;
   height: 24px;
 }
 
@@ -295,58 +292,57 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgb(230, 216, 195);
-  transition: .4s;
-  border-radius: 0px;
+  background-color: #456882;
+  border-radius: 12px;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px;
-  width: 18px;
-  left: 3px;
-  bottom: 3px;
-  background-color: white;
-  transition: .4s;
-  border-radius: 0px;
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #F9F3EF;
+  border-radius: 12px;
 }
 
 input:checked + .slider {
-  background-color: rgb(93, 134, 108);
+  background-color: #1B3C53;
 }
 
 input:checked + .slider:before {
-  transform: translateX(26px);
+  transform: translateX(24px);
 }
 
 .meal-toggle .on {
-  color: rgb(93, 134, 108);
-  font-weight: 400;
+  color: #1B3C53;
+  font-weight: 500;
 }
 
 .meal-toggle .off {
-  color: #e53e3e;
-  font-weight: 400;
+  color: #456882;
+  font-weight: 500;
 }
 
 .meal-summary {
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  color: white;
-  padding: 30px;
-  border-radius: 0px;
+  background-color: #1B3C53;
+  color: #F9F3EF;
+  padding: 32px;
+  border-radius: 12px;
   text-align: center;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .meal-summary h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.3rem;
-  font-weight: 400;
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .meal-count {
-  font-size: 2.5rem;
-  font-weight: 400;
+  font-size: 40px;
+  font-weight: 700;
 }
 
 /* Attendance Table */
@@ -360,92 +356,81 @@ input:checked + .slider:before {
 }
 
 .attendance-table th {
-  background: rgb(245, 245, 240);
-  padding: 15px;
+  background-color: #F9F3EF;
+  padding: 16px;
   text-align: left;
-  color: #4a5568;
-  font-weight: 400;
-  border-bottom: 2px solid rgb(230, 216, 195);
-  font-size: 0.95rem;
+  color: #456882;
+  font-weight: 500;
+  border-bottom: 1px solid #456882;
+  font-size: 14px;
 }
 
 .attendance-table td {
-  padding: 15px;
-  border-bottom: 1px solid rgb(230, 216, 195);
-  color: #4a5568;
-  font-size: 0.9rem;
+  padding: 16px;
+  border-bottom: 1px solid #456882;
+  color: #456882;
+  font-size: 14px;
 }
 
 .status {
-  padding: 5px 14px;
-  border-radius: 0px;
-  font-size: 0.85rem;
-  font-weight: 400;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
   display: inline-block;
 }
 
 .status.present {
-  background: #c6f6d5;
-  color: #276749;
+  background-color: #D2C1B6;
+  color: #1B3C53;
 }
 
 .status.absent {
-  background: #fed7d7;
-  color: #c53030;
+  background-color: #456882;
+  color: #F9F3EF;
 }
 
 /* Room Allocation */
 .room-allocation-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 24px;
 }
 
 .student-room-card {
-  background: rgb(245, 245, 240);
-  border: 1.5px solid rgb(230, 216, 195);
-  border-radius: 0px;
-  padding: 20px;
-  transition: all 0.3s;
-}
-
-.student-room-card:hover {
-  border-color: rgb(194, 166, 140);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background-color: #D2C1B6;
+  border: 1px solid #456882;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .student-room-card h4 {
-  margin: 0 0 15px 0;
-  color: #2d3748;
-  font-size: 1.1rem;
-  font-weight: 400;
+  margin: 0 0 16px 0;
+  color: #1B3C53;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .room-info p {
   margin: 8px 0;
-  color: #4a5568;
-  font-size: 0.9rem;
+  color: #456882;
+  font-size: 14px;
 }
 
 .edit-room-btn {
   width: 100%;
-  margin-top: 15px;
-  padding: 11px;
-  background: rgb(93, 134, 108);
-  color: white;
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #1B3C53;
+  color: #F9F3EF;
   border: none;
-  border-radius: 0px;
-  font-size: 0.9rem;
-  font-weight: 400;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.5px;
-  transition: all 0.3s;
-}
-
-.edit-room-btn:hover {
-  background: rgb(194, 166, 140);
-  transform: translateY(-1px);
 }
 
 /* Modal Styles */
@@ -455,22 +440,22 @@ input:checked + .slider:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background-color: rgba(27, 60, 83, 0.8);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 20px;
+  padding: 24px;
 }
 
 .modal-content {
-  background: white;
-  border-radius: 0px;
+  background-color: #F9F3EF;
+  border-radius: 12px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04);
 }
 
 .modal-content.large-modal {
@@ -478,26 +463,26 @@ input:checked + .slider:before {
 }
 
 .modal-header {
-  padding: 25px 30px;
-  border-bottom: 1.5px solid rgb(230, 216, 195);
+  padding: 24px 32px;
+  border-bottom: 1px solid #456882;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgb(245, 245, 240);
+  background-color: #D2C1B6;
 }
 
 .modal-header h2 {
   margin: 0;
-  color: #2d3748;
-  font-size: 1.5rem;
-  font-weight: 400;
+  color: #1B3C53;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .close-btn {
   background: none;
   border: none;
-  font-size: 2rem;
-  color: #718096;
+  font-size: 24px;
+  color: #456882;
   cursor: pointer;
   line-height: 1;
   padding: 0;
@@ -506,22 +491,17 @@ input:checked + .slider:before {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.3s;
-}
-
-.close-btn:hover {
-  color: #2d3748;
 }
 
 /* Student Form */
 .student-form {
-  padding: 30px;
+  padding: 32px;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 24px;
 }
 
 .form-group {
@@ -535,109 +515,96 @@ input:checked + .slider:before {
 
 .form-group label {
   margin-bottom: 8px;
-  color: #4a5568;
-  font-weight: 400;
-  font-size: 0.95rem;
+  color: #456882;
+  font-weight: 500;
+  font-size: 14px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 12px 14px;
-  border: 1.5px solid rgb(230, 216, 195);
-  border-radius: 0px;
-  font-size: 0.95rem;
-  font-family: 'Instrument Serif', serif;
-  background: rgb(245, 245, 240);
-  color: #2d3748;
-  transition: all 0.2s;
+  padding: 16px 20px;
+  border: 1px solid #456882;
+  border-radius: 12px;
+  font-size: 16px;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #F9F3EF;
+  color: #1B3C53;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: rgb(93, 134, 108);
-  background: white;
-  box-shadow: 0 0 0 3px rgba(93, 134, 108, 0.1);
+  border-color: #1B3C53;
+  background-color: #D2C1B6;
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 60px;
+  min-height: 80px;
 }
 
 .form-section-divider {
   grid-column: 1 / -1;
-  margin: 20px 0;
-  padding-top: 20px;
-  border-top: 1.5px solid rgb(230, 216, 195);
+  margin: 24px 0;
+  padding-top: 24px;
+  border-top: 1px solid #456882;
 }
 
 .form-section-divider h3 {
   margin: 0;
-  color: #2d3748;
-  font-size: 1.2rem;
-  font-weight: 400;
+  color: #1B3C53;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .modal-actions {
-  margin-top: 30px;
+  margin-top: 32px;
   display: flex;
-  gap: 15px;
+  gap: 16px;
   justify-content: flex-end;
 }
 
 .cancel-btn,
 .submit-btn {
-  padding: 12px 30px;
+  padding: 16px 32px;
   border: none;
-  border-radius: 0px;
-  font-size: 0.95rem;
-  font-weight: 400;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
-  font-family: 'Instrument Serif', serif;
+  font-family: 'Agrandir', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   letter-spacing: 0.5px;
-  transition: all 0.3s;
 }
 
 .cancel-btn {
-  background: white;
-  color: #718096;
-  border: 1.5px solid rgb(230, 216, 195);
-}
-
-.cancel-btn:hover {
-  background: rgb(245, 245, 240);
-  color: #4a5568;
+  background-color: #F9F3EF;
+  color: #456882;
+  border: 1px solid #456882;
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, rgb(93, 134, 108) 0%, rgb(194, 166, 140) 100%);
-  color: white;
-}
-
-.submit-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(93, 134, 108, 0.3);
+  background-color: #1B3C53;
+  color: #F9F3EF;
 }
 
 /* Responsive Design */
 @media (max-width: 1200px) {
   .manager-main {
-    padding: 30px;
+    padding: 32px;
   }
 }
 
 @media (max-width: 1024px) {
   .manager-sidebar {
-    width: 260px;
-    min-width: 260px;
+    width: 280px;
+    min-width: 280px;
   }
 
   .students-grid,
   .room-allocation-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
 }
 
@@ -654,7 +621,7 @@ input:checked + .slider:before {
   }
 
   .manager-main {
-    padding: 20px;
+    padding: 24px;
   }
 
   .section-buttons {
@@ -670,7 +637,7 @@ input:checked + .slider:before {
   }
 
   .content-header h1 {
-    font-size: 1.8rem;
+    font-size: 28px;
   }
 
   .students-grid,
@@ -681,23 +648,23 @@ input:checked + .slider:before {
 
 @media (max-width: 480px) {
   .manager-main {
-    padding: 15px;
+    padding: 16px;
   }
 
   .content-section {
-    padding: 20px;
+    padding: 24px;
   }
 
   .student-form {
-    padding: 20px;
+    padding: 24px;
   }
 
   .modal-header {
-    padding: 20px;
+    padding: 24px;
   }
 
   .content-header h1 {
-    font-size: 1.5rem;
+    font-size: 24px;
   }
 }
 
@@ -705,24 +672,18 @@ input:checked + .slider:before {
 .manager-sidebar::-webkit-scrollbar,
 .manager-main::-webkit-scrollbar,
 .modal-content::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 .manager-sidebar::-webkit-scrollbar-track,
 .manager-main::-webkit-scrollbar-track,
 .modal-content::-webkit-scrollbar-track {
-  background: rgb(245, 245, 240);
+  background-color: #F9F3EF;
 }
 
 .manager-sidebar::-webkit-scrollbar-thumb,
 .manager-main::-webkit-scrollbar-thumb,
 .modal-content::-webkit-scrollbar-thumb {
-  background: rgb(194, 166, 140);
-  border-radius: 3px;
-}
-
-.manager-sidebar::-webkit-scrollbar-thumb:hover,
-.manager-main::-webkit-scrollbar-thumb:hover,
-.modal-content::-webkit-scrollbar-thumb:hover {
-  background: rgb(105, 93, 134);
+  background-color: #456882;
+  border-radius: 4px;
 }
