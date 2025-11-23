@@ -60,7 +60,7 @@ const LandingPage = () => {
 
     try {
       const { confirmPassword, ...submitData } = formData;
-      const response = await axios.post('http://localhost:5000/api/institute/register', submitData);
+      const response = await axios.post('/api/institute/register', submitData);
       alert(`Registration successful! Your Institute ID is: ${response.data.instituteId}`);
       setIsRegistering(false);
       setFormData({
@@ -93,7 +93,7 @@ const LandingPage = () => {
     setError('');
 
     try {
-      const response = await axios.get(`http://localhost:5000/api/institute/verify/${instituteId}`);
+      const response = await axios.get(`/api/institute/verify/${instituteId}`);
       if (response.data.exists) {
         navigate(`/login-selection/${instituteId}`);
       }

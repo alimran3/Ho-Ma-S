@@ -8,46 +8,6 @@ import { FaHotel } from "react-icons/fa6";
 import { SiBookmeter } from "react-icons/si";
 import { FcManager } from "react-icons/fc";
 
-
-
-
-
-axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    console.log('API Request:', config.method?.toUpperCase(), config.url);
-    return config;
-  },
-  (error) => {
-    console.error('Request Error:', error);
-    return Promise.reject(error);
-  }
-);
-
-axios.interceptors.response.use(
-  (response) => {
-    console.log('API Response Success:', response.status, response.config.url);
-    return response;
-  },
-  (error) => {
-    console.error('API Response Error:', {
-      url: error.config?.url,
-      status: error.response?.status,
-      message: error.response?.data?.message || error.message
-    });
-
-    if (error.response?.status === 401) {
-      console.log('Authentication failed, redirecting to login...');
-      localStorage.clear();
-      window.location.href = '/';
-    }
-    return Promise.reject(error);
-  }
-);
-
 const OwnerDashboard = () => {
   const navigate = useNavigate();
   const [ownerInfo, setOwnerInfo] = useState(null);

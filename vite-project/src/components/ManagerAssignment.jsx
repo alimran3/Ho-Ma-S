@@ -24,7 +24,7 @@ const ManagerAssignment = ({ currentManager, onClose, onAssign }) => {
   const fetchManagers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:5000/api/managers/available', {
+      const response = await axios.get('/api/managers/available', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setManagers(response.data);
@@ -39,7 +39,7 @@ const ManagerAssignment = ({ currentManager, onClose, onAssign }) => {
     
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('http://localhost:5000/api/managers/create', 
+      const response = await axios.post('/api/managers/create',
         newManager,
         { headers: { Authorization: `Bearer ${token}` }}
       );

@@ -52,13 +52,13 @@ const LoginPage = () => {
       
       // Special handling for guest login (different endpoint)
       if (userType === 'guest') {
-        response = await axios.post('http://localhost:5000/api/auth/guest-login', {
+        response = await axios.post('/api/auth/guest-login', {
           username: credentials.username.trim(),
           password: credentials.password
         });
       } else {
         // Regular login for owner, manager, student
-        response = await axios.post('http://localhost:5000/api/auth/login', {
+        response = await axios.post('/api/auth/login', {
           username: credentials.username.trim(),
           password: credentials.password,
           instituteId: instituteId,
