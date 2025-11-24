@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set the base URL for the deployed backend
-axios.defaults.baseURL = 'https://ho-ma-s-217h.vercel.app';
+axios.defaults.baseURL = 'https://ho-ma-s-3rix.vercel.app';
 
 // Request interceptor to add token
 axios.interceptors.request.use(
