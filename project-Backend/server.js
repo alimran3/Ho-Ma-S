@@ -24,8 +24,25 @@ dotenv.config();
 const app = express();
 
 // Middleware
+// Dynamic CORS configuration to support multiple origins
+const allowedOrigins = [
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'https://ho-ma-s-w1o2.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://ho-ma-s-w1o2.vercel.app/',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 app.use(express.json());
@@ -52,6 +69,15 @@ app.use('/api/student', studentRoutes);
 app.use('/api/guest', guestRoutes);
 app.use('/api/payment', paymentRoutes);
 
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    message: 'Backend is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -63,3 +89,6 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// Export for Vercel serverless
+module.exports = app;
